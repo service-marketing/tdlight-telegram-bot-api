@@ -62,6 +62,7 @@ WebhookActor::WebhookActor(td::ActorShared<Callback> callback, td::int64 tqueue_
   if (r_ascii_host.is_ok()) {
     url_.host_ = r_ascii_host.move_as_ok();
   }
+  host_header_ = td::HttpHeaderCreator::get_host_header(url_.protocol_, url_.host_, url_.port_);
 
   LOG(INFO) << "Set webhook for " << tqueue_id << " with certificate = \"" << cert_path_
             << "\", protocol = " << (url_.protocol_ == td::HttpUrl::Protocol::Http ? "http" : "https")
@@ -148,7 +149,7 @@ td::Status WebhookActor::create_connection() {
       return create_webhook_error("Can't connect to the webhook proxy", r_proxy_socket_fd.move_as_error(), false);
     }
     if (!was_checked_) {
-      // verify webhook even we can't establish connection to the webhook
+      // verify webhook even if we can't establish connection to the webhook
       was_checked_ = true;
       on_webhook_verified();
     }
@@ -552,7 +553,7 @@ td::Status WebhookActor::send_update() {
 
   td::HttpHeaderCreator hc;
   hc.init_post(url_.query_);
-  hc.add_header("Host", url_.host_);
+  hc.add_header("Host", host_header_);
   if (!url_.userinfo_.empty()) {
     hc.add_header("Authorization", PSLICE() << "Basic " << td::base64_encode(url_.userinfo_));
   }
