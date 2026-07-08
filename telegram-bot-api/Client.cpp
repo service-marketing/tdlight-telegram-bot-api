@@ -4014,6 +4014,7 @@ void Client::JsonMessage::store(td::JsonValueScope *scope) const {
   }
   object("chat", JsonChat(message_->chat_id, client_));
   object("date", message_->date);
+  object("is_outgoing", td::JsonBool(message_->is_outgoing));
   if (message_->edit_date > 0) {
     object("edit_date", message_->edit_date);
   }
@@ -4375,8 +4376,11 @@ void Client::JsonMessage::store(td::JsonValueScope *scope) const {
       break;
     case td_api::messageChatSetTheme::ID:
       break;
-    case td_api::messageAnimatedEmoji::ID:
+    case td_api::messageAnimatedEmoji::ID: {
+      auto content = static_cast<const td_api::messageAnimatedEmoji *>(message_->content.get());
+      object("text", content->emoji_);
       break;
+    }
     case td_api::messagePassportDataSent::ID:
       break;
     case td_api::messagePassportDataReceived::ID: {
@@ -18126,39 +18130,8 @@ bool Client::need_skip_update_message(int64 chat_id, const object_ptr<td_api::me
     chat = nullptr;
     chat_type = ChatInfo::Type::Private;
   }
-  if (message->is_outgoing_ && chat_id != 0) {
-    switch (message->content_->get_id()) {
-      case td_api::messageChatChangeTitle::ID:
-      case td_api::messageChatChangePhoto::ID:
-      case td_api::messageChatDeletePhoto::ID:
-      case td_api::messageChatDeleteMember::ID:
-      case td_api::messageChatSetTheme::ID:
-      case td_api::messagePinMessage::ID:
-      case td_api::messageProximityAlertTriggered::ID:
-      case td_api::messageVideoChatScheduled::ID:
-      case td_api::messageVideoChatStarted::ID:
-      case td_api::messageVideoChatEnded::ID:
-      case td_api::messageInviteVideoChatParticipants::ID:
-      case td_api::messageForumTopicCreated::ID:
-      case td_api::messageForumTopicEdited::ID:
-      case td_api::messageForumTopicIsClosedToggled::ID:
-      case td_api::messageForumTopicIsHiddenToggled::ID:
-      case td_api::messageGiveawayCreated::ID:
-      case td_api::messageGiveaway::ID:
-      case td_api::messageGiveawayWinners::ID:
-      case td_api::messageGiveawayCompleted::ID:
-      case td_api::messagePaymentRefunded::ID:
-      case td_api::messageSuggestedPostApprovalFailed::ID:
-      case td_api::messageSuggestedPostApproved::ID:
-      case td_api::messageSuggestedPostDeclined::ID:
-      case td_api::messageSuggestedPostPaid::ID:
-      case td_api::messageSuggestedPostRefunded::ID:
-        // don't skip
-        break;
-      default:
-        return true;
-    }
-  }
+  // Outgoing messages (sent by this bot/user account, from any client) are no longer
+  // filtered out here, so webhooks also receive updates for self-sent messages.
 
   int32 message_date = message->edit_date_ == 0 ? message->date_ : message->edit_date_;
   if (message_date <= get_unix_time() - 86400) {
@@ -18857,6 +18830,7 @@ void Client::init_message(MessageInfo *message_info, object_ptr<td_api::message>
   message_info->can_be_saved = message->can_be_saved_;
   message_info->is_scheduled = message->scheduling_state_ != nullptr;
   message_info->is_from_offline = message->is_from_offline_;
+  message_info->is_outgoing = message->is_outgoing_;
   message_info->topic_id = std::move(message->topic_id_);
   message_info->author_signature = std::move(message->author_signature_);
   message_info->sender_boost_count = message->sender_boost_count_;

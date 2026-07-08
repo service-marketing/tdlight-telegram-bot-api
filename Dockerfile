@@ -11,7 +11,7 @@ ADD telegram-bot-api /usr/src/telegram-bot-api/telegram-bot-api
 RUN mkdir -p build \
  && cd build \
  && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH=.. .. \
- && cmake --build . --target install -j $(nproc) \
+ && cmake --build . --target install -j 4 \
  && strip /usr/src/telegram-bot-api/bin/telegram-bot-api
 
 FROM alpine:3.12
