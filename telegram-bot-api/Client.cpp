@@ -5485,6 +5485,23 @@ class Client::JsonBusinessMessagesDeleted final : public td::Jsonable {
   const Client *client_;
 };
 
+class Client::JsonDeletedMessages final : public td::Jsonable {
+ public:
+  JsonDeletedMessages(int64 chat_id, const td::vector<int64> &message_ids, const Client *client)
+      : chat_id_(chat_id), message_ids_(message_ids), client_(client) {
+  }
+  void store(td::JsonValueScope *scope) const {
+    auto object = scope->enter_object();
+    object("chat", JsonChat(chat_id_, client_));
+    object("message_ids", td::json_array(message_ids_, as_client_message_id));
+  }
+
+ private:
+  int64 chat_id_;
+  const td::vector<int64> &message_ids_;
+  const Client *client_;
+};
+
 class Client::JsonReceivedGift final : public td::Jsonable {
  public:
   JsonReceivedGift(const td_api::receivedGift *received_gift, bool can_be_managed, const Client *client)
@@ -9357,11 +9374,20 @@ void Client::on_update(object_ptr<td_api::Object> result) {
     case td_api::updateDeleteMessages::ID: {
       auto update = move_object_as<td_api::updateDeleteMessages>(result);
       td::vector<td::unique_ptr<MessageInfo>> deleted_messages;
+      td::vector<int64> confirmed_deleted_message_ids;
       for (auto message_id : update->message_ids_) {
         auto deleted_message = delete_message(update->chat_id_, message_id, update->from_cache_);
         if (deleted_message != nullptr) {
           deleted_messages.push_back(std::move(deleted_message));
         }
+        if (!update->from_cache_) {
+          confirmed_deleted_message_ids.push_back(message_id);
+        }
+      }
+      if (!confirmed_deleted_message_ids.empty()) {
+        auto webhook_queue_id = update->chat_id_ + (static_cast<int64>(12) << 33);
+        add_update(UpdateType::DeletedMessages, JsonDeletedMessages(update->chat_id_, confirmed_deleted_message_ids, this),
+                   86400, webhook_queue_id);
       }
       td::Scheduler::instance()->destroy_on_scheduler(SharedData::get_file_gc_scheduler_id(), deleted_messages);
       break;
@@ -17663,6 +17689,8 @@ td::Slice Client::get_update_type_name(UpdateType update_type) {
       return td::Slice("deleted_business_messages");
     case UpdateType::PurchasedPaidMedia:
       return td::Slice("purchased_paid_media");
+    case UpdateType::DeletedMessages:
+      return td::Slice("deleted_messages");
     default:
       UNREACHABLE();
       return td::Slice();

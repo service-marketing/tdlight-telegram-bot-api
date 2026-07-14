@@ -215,6 +215,7 @@ class Client final : public WebhookActor::Callback {
   class JsonBusinessBotRights;
   class JsonBusinessConnection;
   class JsonBusinessMessagesDeleted;
+  class JsonDeletedMessages;
   class JsonAddress;
   class JsonOrderInfo;
   class JsonStory;
@@ -1483,6 +1484,7 @@ class Client final : public WebhookActor::Callback {
     EditedBusinessMessage,
     BusinessMessagesDeleted,
     PurchasedPaidMedia,
+    DeletedMessages,
     Size
   };
 
