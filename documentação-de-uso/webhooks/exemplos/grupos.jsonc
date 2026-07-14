@@ -1,0 +1,938 @@
+[
+    // ---- type group ----
+    // type text
+    {
+        "update_id": 993143495,
+        "message": {
+            "message_id": 88,
+            "from": {
+                "id": 5425710484,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "user_status": "online"
+            },
+            "chat": {
+                "id": -5558416090,
+                "title": "Teste criação",
+                "type": "group",
+                "all_members_are_administrators": false,
+                "accepted_gift_types": {
+                    "unlimited_gifts": false,
+                    "limited_gifts": false,
+                    "unique_gifts": false,
+                    "premium_subscription": false,
+                    "gifts_from_channels": false
+                }
+            },
+            "date": 1784053148,
+            "is_outgoing": false,
+            "text": "Texto"
+        }
+    },
+    // type audio
+    {
+        "update_id": 993143496,
+        "message": {
+            "message_id": 89,
+            "from": {
+                "id": 5425710484,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "user_status": "online"
+            },
+            "chat": {
+                "id": -5558416090,
+                "title": "Teste criação",
+                "type": "group",
+                "all_members_are_administrators": false,
+                "accepted_gift_types": {
+                    "unlimited_gifts": false,
+                    "limited_gifts": false,
+                    "unique_gifts": false,
+                    "premium_subscription": false,
+                    "gifts_from_channels": false
+                }
+            },
+            "date": 1784053190,
+            "is_outgoing": false,
+            "voice": {
+                "duration": 1,
+                "mime_type": "audio/ogg",
+                "file_id": "AwACAgEAAxkBAANZalZ9xtAgmGUxXKwjr9ju0BnISKUAAlwGAAKAb7hG2JPuIIHBAts6BA",
+                "file_unique_id": "AgADXAYAAoBvuEY",
+                "file_size": 36304
+            }
+        }
+    },
+    // type sticker
+    {
+        "update_id": 993143497,
+        "message": {
+            "message_id": 90,
+            "from": {
+                "id": 5425710484,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "user_status": "online"
+            },
+            "chat": {
+                "id": -5558416090,
+                "title": "Teste criação",
+                "type": "group",
+                "all_members_are_administrators": false,
+                "accepted_gift_types": {
+                    "unlimited_gifts": false,
+                    "limited_gifts": false,
+                    "unique_gifts": false,
+                    "premium_subscription": false,
+                    "gifts_from_channels": false
+                }
+            },
+            "date": 1784053243,
+            "is_outgoing": false,
+            "sticker": {
+                "width": 512,
+                "height": 512,
+                "emoji": "👍",
+                "set_name": "KangarooFighter",
+                "is_animated": true,
+                "is_video": false,
+                "type": "regular",
+                "thumbnail": {
+                    "file_id": "AAMCAgADGQEAA1pqVn37T8wwwuJKuYkowcjAVS8TeQACIwADWbv8JZG80mBAZfPHAQAHbQADOgQ",
+                    "file_unique_id": "AQADIwADWbv8JXI",
+                    "file_size": 5256,
+                    "width": 128,
+                    "height": 128
+                },
+                "thumb": {
+                    "file_id": "AAMCAgADGQEAA1pqVn37T8wwwuJKuYkowcjAVS8TeQACIwADWbv8JZG80mBAZfPHAQAHbQADOgQ",
+                    "file_unique_id": "AQADIwADWbv8JXI",
+                    "file_size": 5256,
+                    "width": 128,
+                    "height": 128
+                },
+                "file_id": "CAACAgIAAxkBAANaalZ9-0_MMMLiSrmJKMHIwFUvE3kAAiMAA1m7_CWRvNJgQGXzxzoE",
+                "file_unique_id": "AgADIwADWbv8JQ",
+                "file_size": 38165
+            }
+        }
+    },
+    // type image
+    {
+        "update_id": 993143498,
+        "message": {
+            "message_id": 91,
+            "from": {
+                "id": 5425710484,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "user_status": "online"
+            },
+            "chat": {
+                "id": -5558416090,
+                "title": "Teste criação",
+                "type": "group",
+                "all_members_are_administrators": false,
+                "accepted_gift_types": {
+                    "unlimited_gifts": false,
+                    "limited_gifts": false,
+                    "unique_gifts": false,
+                    "premium_subscription": false,
+                    "gifts_from_channels": false
+                }
+            },
+            "date": 1784053333,
+            "is_outgoing": false,
+            "photo": [
+                {
+                    "file_id": "AgACAgEAAxkBAANbalZ-Vb838hc8g1c4xm-Nk4-LzjcAAmEMaxuAb7hGR7tX7MRg2wIBAAMCAANtAAM6BA",
+                    "file_unique_id": "AQADYQxrG4BvuEZy",
+                    "file_size": 9856,
+                    "width": 180,
+                    "height": 320
+                },
+                {
+                    "file_id": "AgACAgEAAxkBAANbalZ-Vb838hc8g1c4xm-Nk4-LzjcAAmEMaxuAb7hGR7tX7MRg2wIBAAMCAAN4AAM6BA",
+                    "file_unique_id": "AQADYQxrG4BvuEZ9",
+                    "file_size": 37531,
+                    "width": 450,
+                    "height": 800
+                },
+                {
+                    "file_id": "AgACAgEAAxkBAANbalZ-Vb838hc8g1c4xm-Nk4-LzjcAAmEMaxuAb7hGR7tX7MRg2wIBAAMCAAN5AAM6BA",
+                    "file_unique_id": "AQADYQxrG4BvuEZ-",
+                    "file_size": 65323,
+                    "width": 720,
+                    "height": 1280
+                }
+            ]
+        }
+    },
+    // type image - com caption
+    {
+        "update_id": 993143499,
+        "message": {
+            "message_id": 92,
+            "from": {
+                "id": 5425710484,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "user_status": "online"
+            },
+            "chat": {
+                "id": -5558416090,
+                "title": "Teste criação",
+                "type": "group",
+                "all_members_are_administrators": false,
+                "accepted_gift_types": {
+                    "unlimited_gifts": false,
+                    "limited_gifts": false,
+                    "unique_gifts": false,
+                    "premium_subscription": false,
+                    "gifts_from_channels": false
+                }
+            },
+            "date": 1784053499,
+            "is_outgoing": false,
+            "photo": [
+                {
+                    "file_id": "AgACAgEAAxkBAANcalZ--71dCWzrVK1JO0dN1LSwe_0AAmIMaxuAb7hGueNKekXvHlkBAAMCAANtAAM6BA",
+                    "file_unique_id": "AQADYgxrG4BvuEZy",
+                    "file_size": 15134,
+                    "width": 180,
+                    "height": 320
+                },
+                {
+                    "file_id": "AgACAgEAAxkBAANcalZ--71dCWzrVK1JO0dN1LSwe_0AAmIMaxuAb7hGueNKekXvHlkBAAMCAAN4AAM6BA",
+                    "file_unique_id": "AQADYgxrG4BvuEZ9",
+                    "file_size": 71691,
+                    "width": 450,
+                    "height": 800
+                },
+                {
+                    "file_id": "AgACAgEAAxkBAANcalZ--71dCWzrVK1JO0dN1LSwe_0AAmIMaxuAb7hGueNKekXvHlkBAAMCAAN5AAM6BA",
+                    "file_unique_id": "AQADYgxrG4BvuEZ-",
+                    "file_size": 139547,
+                    "width": 720,
+                    "height": 1280
+                }
+            ],
+            "caption": "Com caption"
+        }
+    },
+    // type video
+    {
+        "update_id": 993143500,
+        "message": {
+            "message_id": 93,
+            "from": {
+                "id": 5425710484,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "user_status": "online"
+            },
+            "chat": {
+                "id": -5558416090,
+                "title": "Teste criação",
+                "type": "group",
+                "all_members_are_administrators": false,
+                "accepted_gift_types": {
+                    "unlimited_gifts": false,
+                    "limited_gifts": false,
+                    "unique_gifts": false,
+                    "premium_subscription": false,
+                    "gifts_from_channels": false
+                }
+            },
+            "date": 1784053567,
+            "is_outgoing": false,
+            "video": {
+                "duration": 4,
+                "width": 196,
+                "height": 150,
+                "mime_type": "video/mp4",
+                "thumbnail": {
+                    "file_id": "AAMCAQADGQEAA11qVn8_6tUKR-ClsQN7cYBCaCjUHwACXwYAAoBvuEbr8ZdJoAz5UwEAB20AAzoE",
+                    "file_unique_id": "AQADXwYAAoBvuEZy",
+                    "file_size": 7989,
+                    "width": 196,
+                    "height": 150
+                },
+                "thumb": {
+                    "file_id": "AAMCAQADGQEAA11qVn8_6tUKR-ClsQN7cYBCaCjUHwACXwYAAoBvuEbr8ZdJoAz5UwEAB20AAzoE",
+                    "file_unique_id": "AQADXwYAAoBvuEZy",
+                    "file_size": 7989,
+                    "width": 196,
+                    "height": 150
+                },
+                "file_id": "BAACAgEAAxkBAANdalZ_P-rVCkfgpbEDe3GAQmgo1B8AAl8GAAKAb7hG6_GXSaAM-VM6BA",
+                "file_unique_id": "AgADXwYAAoBvuEY",
+                "file_size": 118455
+            }
+        }
+    },
+    // type files
+    {
+        "update_id": 993143501,
+        "message": {
+            "message_id": 94,
+            "from": {
+                "id": 5425710484,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "user_status": "online"
+            },
+            "chat": {
+                "id": -5558416090,
+                "title": "Teste criação",
+                "type": "group",
+                "all_members_are_administrators": false,
+                "accepted_gift_types": {
+                    "unlimited_gifts": false,
+                    "limited_gifts": false,
+                    "unique_gifts": false,
+                    "premium_subscription": false,
+                    "gifts_from_channels": false
+                }
+            },
+            "date": 1784053697,
+            "is_outgoing": false,
+            "document": {
+                "file_name": "ComprovanteSantander-1757557704.25417.pdf",
+                "mime_type": "application/pdf",
+                "file_id": "BQACAgEAAxkBAANealZ_wTXuwIroUr8xH_IadUFgIWkAAmIGAAKAb7hGqkZxGzBlevw6BA",
+                "file_unique_id": "AgADYgYAAoBvuEY",
+                "file_size": 6005
+            }
+        }
+    },
+    // type fixed location
+    {
+        "update_id": 993143502,
+        "message": {
+            "message_id": 95,
+            "from": {
+                "id": 5425710484,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "user_status": "online"
+            },
+            "chat": {
+                "id": -5558416090,
+                "title": "Teste criação",
+                "type": "group",
+                "all_members_are_administrators": false,
+                "accepted_gift_types": {
+                    "unlimited_gifts": false,
+                    "limited_gifts": false,
+                    "unique_gifts": false,
+                    "premium_subscription": false,
+                    "gifts_from_channels": false
+                }
+            },
+            "date": 1784053752,
+            "is_outgoing": false,
+            "location": {
+                "latitude": -23.492909,
+                "longitude": -46.64219
+            }
+        }
+    },
+    // type real-time location
+    {
+        "update_id": 993143503,
+        "message": {
+            "message_id": 96,
+            "from": {
+                "id": 5425710484,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "user_status": "online"
+            },
+            "chat": {
+                "id": -5558416090,
+                "title": "Teste criação",
+                "type": "group",
+                "all_members_are_administrators": false,
+                "accepted_gift_types": {
+                    "unlimited_gifts": false,
+                    "limited_gifts": false,
+                    "unique_gifts": false,
+                    "premium_subscription": false,
+                    "gifts_from_channels": false
+                }
+            },
+            "date": 1784053792,
+            "is_outgoing": false,
+            "location": {
+                "latitude": -23.492936,
+                "longitude": -46.64219,
+                "live_period": 900
+            }
+        }
+    },
+    // update location permission
+    {
+        "update_id": 993143504,
+        "edited_message": {
+            "message_id": 96,
+            "from": {
+                "id": 5425710484,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "user_status": "online"
+            },
+            "chat": {
+                "id": -5558416090,
+                "title": "Teste criação",
+                "type": "group",
+                "all_members_are_administrators": false,
+                "accepted_gift_types": {
+                    "unlimited_gifts": false,
+                    "limited_gifts": false,
+                    "unique_gifts": false,
+                    "premium_subscription": false,
+                    "gifts_from_channels": false
+                }
+            },
+            "date": 1784053792,
+            "is_outgoing": false,
+            "edit_date": 1784053828,
+            "location": {
+                "latitude": -23.492924,
+                "longitude": -46.64215,
+                "live_period": 29700,
+                "horizontal_accuracy": 8
+            }
+        }
+    },
+    // this revoke permission
+    {
+        "update_id": 993143506,
+        "edited_message": {
+            "message_id": 96,
+            "from": {
+                "id": 5425710484,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "user_status": "online"
+            },
+            "chat": {
+                "id": -5558416090,
+                "title": "Teste criação",
+                "type": "group",
+                "all_members_are_administrators": false,
+                "accepted_gift_types": {
+                    "unlimited_gifts": false,
+                    "limited_gifts": false,
+                    "unique_gifts": false,
+                    "premium_subscription": false,
+                    "gifts_from_channels": false
+                }
+            },
+            "date": 1784053792,
+            "is_outgoing": false,
+            "edit_date": 1784053851,
+            "location": {
+                "latitude": -23.49291,
+                "longitude": -46.642165,
+                "horizontal_accuracy": 3
+            }
+        }
+    },
+    // type contact vcard
+    {
+        "update_id": 993143507,
+        "message": {
+            "message_id": 97,
+            "from": {
+                "id": 5425710484,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "user_status": "online"
+            },
+            "chat": {
+                "id": -5558416090,
+                "title": "Teste criação",
+                "type": "group",
+                "all_members_are_administrators": false,
+                "accepted_gift_types": {
+                    "unlimited_gifts": false,
+                    "limited_gifts": false,
+                    "unique_gifts": false,
+                    "premium_subscription": false,
+                    "gifts_from_channels": false
+                }
+            },
+            "date": 1784053929,
+            "is_outgoing": false,
+            "contact": {
+                "phone_number": "+5511969082639",
+                "first_name": "Alex Sm",
+                "vcard": "BEGIN:VCARD VERSION: 3.0 FN:Alex Sm TEL;MOBILE:+5511969082639 END:VCARD",
+                "user_id": 8989074661
+            }
+        }
+    },
+    // type audio (music)
+    {
+        "update_id": 993143508,
+        "message": {
+            "message_id": 98,
+            "from": {
+                "id": 5425710484,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "user_status": "online"
+            },
+            "chat": {
+                "id": -5558416090,
+                "title": "Teste criação",
+                "type": "group",
+                "all_members_are_administrators": false,
+                "accepted_gift_types": {
+                    "unlimited_gifts": false,
+                    "limited_gifts": false,
+                    "unique_gifts": false,
+                    "premium_subscription": false,
+                    "gifts_from_channels": false
+                }
+            },
+            "date": 1784054028,
+            "is_outgoing": false,
+            "audio": {
+                "duration": 1,
+                "file_name": "AUD-20250809-WA0001.opus",
+                "mime_type": "audio/opus",
+                "title": "AUD-20250809-WA0001",
+                "performer": "<unknown>",
+                "file_id": "CQACAgEAAxkBAANialaBDL-In9YXBpEo_IdHAo-bT9QAAmQGAAKAb7hGs8dxxS8W8ss6BA",
+                "file_unique_id": "AgADZAYAAoBvuEY",
+                "file_size": 4568
+            }
+        }
+    },
+    // type gif
+    {
+        "update_id": 993143509,
+        "message": {
+            "message_id": 99,
+            "from": {
+                "id": 5425710484,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "user_status": "online"
+            },
+            "chat": {
+                "id": -5558416090,
+                "title": "Teste criação",
+                "type": "group",
+                "all_members_are_administrators": false,
+                "accepted_gift_types": {
+                    "unlimited_gifts": false,
+                    "limited_gifts": false,
+                    "unique_gifts": false,
+                    "premium_subscription": false,
+                    "gifts_from_channels": false
+                }
+            },
+            "date": 1784054172,
+            "is_outgoing": false,
+            "document": {
+                "file_name": "mbappe-dance.gif",
+                "mime_type": "image/gif",
+                "thumbnail": {
+                    "file_id": "AAMCAQADGQEAA2NqVoGcxi760DK5fHNqV4r_zqsElgACZQYAAoBvuEb1XeBaY-oDKQEAB20AAzoE",
+                    "file_unique_id": "AQADZQYAAoBvuEZy",
+                    "file_size": 10191,
+                    "width": 180,
+                    "height": 320
+                },
+                "thumb": {
+                    "file_id": "AAMCAQADGQEAA2NqVoGcxi760DK5fHNqV4r_zqsElgACZQYAAoBvuEb1XeBaY-oDKQEAB20AAzoE",
+                    "file_unique_id": "AQADZQYAAoBvuEZy",
+                    "file_size": 10191,
+                    "width": 180,
+                    "height": 320
+                },
+                "file_id": "BQACAgEAAxkBAANjalaBnMYu-tAyuXxzaleK_86rBJYAAmUGAAKAb7hG9V3gWmPqAyk6BA",
+                "file_unique_id": "AgADZQYAAoBvuEY",
+                "file_size": 270730
+            }
+        }
+    },
+    // type video-note
+    {
+        "update_id": 993143510,
+        "message": {
+            "message_id": 100,
+            "from": {
+                "id": 5425710484,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "user_status": "online"
+            },
+            "chat": {
+                "id": -5558416090,
+                "title": "Teste criação",
+                "type": "group",
+                "all_members_are_administrators": false,
+                "accepted_gift_types": {
+                    "unlimited_gifts": false,
+                    "limited_gifts": false,
+                    "unique_gifts": false,
+                    "premium_subscription": false,
+                    "gifts_from_channels": false
+                }
+            },
+            "date": 1784054276,
+            "is_outgoing": false,
+            "video_note": {
+                "duration": 3,
+                "length": 384,
+                "thumbnail": {
+                    "file_id": "AAMCAQADGQEAA2RqVoIDX4dVBY0yV31fHFVD8FhmnQACZgYAAoBvuEYGIzftuQadOgEAB20AAzoE",
+                    "file_unique_id": "AQADZgYAAoBvuEZy",
+                    "file_size": 6801,
+                    "width": 320,
+                    "height": 320
+                },
+                "thumb": {
+                    "file_id": "AAMCAQADGQEAA2RqVoIDX4dVBY0yV31fHFVD8FhmnQACZgYAAoBvuEYGIzftuQadOgEAB20AAzoE",
+                    "file_unique_id": "AQADZgYAAoBvuEZy",
+                    "file_size": 6801,
+                    "width": 320,
+                    "height": 320
+                },
+                "file_id": "DQACAgEAAxkBAANkalaCA1-HVQWNMld9XxxVQ_BYZp0AAmYGAAKAb7hGBiM37bkGnTo6BA",
+                "file_unique_id": "AgADZgYAAoBvuEY",
+                "file_size": 319998
+            }
+        }
+    },
+    // type checklist
+    {
+        "update_id": 993143511,
+        "message": {
+            "message_id": 101,
+            "from": {
+                "id": 5425710484,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "user_status": "online",
+                "is_premium": true
+            },
+            "chat": {
+                "id": -5558416090,
+                "title": "Teste criação",
+                "type": "group",
+                "all_members_are_administrators": false,
+                "accepted_gift_types": {
+                    "unlimited_gifts": false,
+                    "limited_gifts": false,
+                    "unique_gifts": false,
+                    "premium_subscription": false,
+                    "gifts_from_channels": false
+                }
+            },
+            "date": 1784054362,
+            "is_outgoing": true,
+            "checklist": {
+                "title": "Teste lista",
+                "tasks": [
+                    {
+                        "id": 1,
+                        "text": "Tarefa 1"
+                    },
+                    {
+                        "id": 2,
+                        "text": "Tarefa 2"
+                    }
+                ],
+                "others_can_add_tasks": true,
+                "others_can_mark_tasks_as_done": true
+            }
+        }
+    },
+    // type checklist updated
+    {
+        "update_id": 993143512,
+        "message": {
+            "message_id": 102,
+            "from": {
+                "id": 5425710484,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "is_premium": true,
+                "user_status": "online"
+            },
+            "chat": {
+                "id": -5558416090,
+                "title": "Teste criação",
+                "type": "group",
+                "all_members_are_administrators": false,
+                "accepted_gift_types": {
+                    "unlimited_gifts": false,
+                    "limited_gifts": false,
+                    "unique_gifts": false,
+                    "premium_subscription": false,
+                    "gifts_from_channels": false
+                }
+            },
+            "date": 1784054410,
+            "is_outgoing": true,
+            "checklist_tasks_done": {
+                "checklist_message": {
+                    "message_id": 101,
+                    "from": {
+                        "id": 8989074661,
+                        "is_bot": false,
+                        "is_deleted": false,
+                        "first_name": "SM CLICK",
+                        "is_premium": true,
+                        "user_status": "online"
+                    },
+                    "chat": {
+                        "id": -5558416090,
+                        "title": "Teste criação",
+                        "type": "group",
+                        "all_members_are_administrators": false,
+                        "accepted_gift_types": {
+                            "unlimited_gifts": false,
+                            "limited_gifts": false,
+                            "unique_gifts": false,
+                            "premium_subscription": false,
+                            "gifts_from_channels": false
+                        }
+                    },
+                    "date": 1784054362,
+                    "is_outgoing": true,
+                    "checklist": {
+                        "title": "Teste lista",
+                        "tasks": [
+                            {
+                                "id": 1,
+                                "text": "Tarefa 1",
+                                "completed_by_user": {
+                                    "id": 8989074661,
+                                    "is_bot": false,
+                                    "is_deleted": false,
+                                    "first_name": "SM CLICK",
+                                    "is_premium": true,
+                                    "user_status": "online"
+                                },
+                                "completion_date": 1784054410
+                            },
+                            {
+                                "id": 2,
+                                "text": "Tarefa 2"
+                            }
+                        ],
+                        "others_can_add_tasks": true,
+                        "others_can_mark_tasks_as_done": true
+                    }
+                },
+                "marked_as_done_task_ids": [
+                    1
+                ]
+            }
+        }
+    },
+    // type - deleted
+    {
+        "update_id": 993143514,
+        "deleted_messages": {
+            "chat": {
+                "id": -5558416090,
+                "title": "Teste criação",
+                "type": "group",
+                "all_members_are_administrators": false,
+                "accepted_gift_types": {
+                    "unlimited_gifts": false,
+                    "limited_gifts": false,
+                    "unique_gifts": false,
+                    "premium_subscription": false,
+                    "gifts_from_channels": false
+                }
+            },
+            "message_ids": [
+                103
+            ]
+        }
+    },
+    // type quoted message
+    {
+        "update_id": 993143516,
+        "message": {
+            "message_id": 105,
+            "from": {
+                "id": 5425710484,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "user_status": "online"
+            },
+            "chat": {
+                "id": -5558416090,
+                "title": "Teste criação",
+                "type": "group",
+                "all_members_are_administrators": false,
+                "accepted_gift_types": {
+                    "unlimited_gifts": false,
+                    "limited_gifts": false,
+                    "unique_gifts": false,
+                    "premium_subscription": false,
+                    "gifts_from_channels": false
+                }
+            },
+            "date": 1784054543,
+            "is_outgoing": false,
+            "reply_to_message": {
+                "message_id": 104,
+                "from": {
+                    "id": 8989074661,
+                    "is_bot": false,
+                    "is_deleted": false,
+                    "first_name": "SM CLICK",
+                    "is_premium": true,
+                    "user_status": "online"
+                },
+                "chat": {
+                    "id": -5558416090,
+                    "title": "Teste criação",
+                    "type": "group",
+                    "all_members_are_administrators": false,
+                    "accepted_gift_types": {
+                        "unlimited_gifts": false,
+                        "limited_gifts": false,
+                        "unique_gifts": false,
+                        "premium_subscription": false,
+                        "gifts_from_channels": false
+                    }
+                },
+                "date": 1784054531,
+                "is_outgoing": true,
+                "text": "Teste teste"
+            },
+            "text": "Slv"
+        }
+    },
+    // message quoted in a specific location
+    {
+        "update_id": 993143517,
+        "message": {
+            "message_id": 106,
+            "from": {
+                "id": 5425710484,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "user_status": "online"
+            },
+            "chat": {
+                "id": -5558416090,
+                "title": "Teste criação",
+                "type": "group",
+                "all_members_are_administrators": false,
+                "accepted_gift_types": {
+                    "unlimited_gifts": false,
+                    "limited_gifts": false,
+                    "unique_gifts": false,
+                    "premium_subscription": false,
+                    "gifts_from_channels": false
+                }
+            },
+            "date": 1784054593,
+            "is_outgoing": false,
+            "reply_to_message": {
+                "message_id": 104,
+                "from": {
+                    "id": 8989074661,
+                    "is_bot": false,
+                    "is_deleted": false,
+                    "first_name": "SM CLICK",
+                    "is_premium": true,
+                    "user_status": "online"
+                },
+                "chat": {
+                    "id": -5558416090,
+                    "title": "Teste criação",
+                    "type": "group",
+                    "all_members_are_administrators": false,
+                    "accepted_gift_types": {
+                        "unlimited_gifts": false,
+                        "limited_gifts": false,
+                        "unique_gifts": false,
+                        "premium_subscription": false,
+                        "gifts_from_channels": false
+                    }
+                },
+                "date": 1784054531,
+                "is_outgoing": true,
+                "text": "Teste teste"
+            },
+            "quote": {
+                "text": "teste",
+                "position": 6,
+                "is_manual": true
+            },
+            "text": "Citação"
+        }
+    }
+]

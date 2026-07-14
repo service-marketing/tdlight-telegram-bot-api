@@ -1,0 +1,842 @@
+[
+    // ---- Type Chats ----
+    // Type text
+    {
+        "update_id": 8231964,
+        "message": {
+            "message_id": 1415,
+            "from": {
+                "id": 7278484727,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Minha",
+                "last_name": "Venus ❤️",
+                "user_status": "online"
+            },
+            "chat": {
+                "id": 7278484727,
+                "first_name": "Minha",
+                "last_name": "Venus ❤️",
+                "type": "private",
+                "user_status": "online"
+            },
+            "date": 1783445350,
+            "is_outgoing": false,
+            "text": "Oi"
+        }
+    },
+    // type audio
+    {
+        "update_id": 8231965,
+        "message": {
+            "message_id": 1416,
+            "from": {
+                "id": 7278484727,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Minha",
+                "last_name": "Venus ❤️",
+                "user_status": "online"
+            },
+            "chat": {
+                "id": 7278484727,
+                "first_name": "Minha",
+                "last_name": "Venus ❤️",
+                "type": "private",
+                "user_status": "online"
+            },
+            "date": 1783445557,
+            "is_outgoing": false,
+            "voice": {
+                "duration": 2,
+                "mime_type": "audio/ogg",
+                "file_id": "AwACAgEAAxkBAAIFiGpNODWYxog9y9oj5FJ1KiZxXtttAAJyBgACRE5oRqvavndzrQtdOgQ",
+                "file_unique_id": "AgADcgYAAkROaEY",
+                "file_size": 49931
+            }
+        }
+    },
+    // type sticker
+    {
+        "update_id": 8231967,
+        "message": {
+            "message_id": 1418,
+            "from": {
+                "id": 7278484727,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Minha",
+                "last_name": "Venus ❤️",
+                "user_status": "online"
+            },
+            "chat": {
+                "id": 7278484727,
+                "first_name": "Minha",
+                "last_name": "Venus ❤️",
+                "type": "private",
+                "user_status": "online"
+            },
+            "date": 1783445687,
+            "is_outgoing": false,
+            "sticker": {
+                "width": 512,
+                "height": 512,
+                "emoji": "👍",
+                "set_name": "MrCat",
+                "is_animated": true,
+                "is_video": false,
+                "type": "regular",
+                "thumbnail": {
+                    "file_id": "AAMCAgADGQEAAgWKak04t07Rv7t5u7pyiiOCTyXCovoAAkIAA1m7_CXewW-gOz9b0QEAB20AAzoE",
+                    "file_unique_id": "AQADQgADWbv8JXI",
+                    "file_size": 4378,
+                    "width": 128,
+                    "height": 128
+                },
+                "thumb": {
+                    "file_id": "AAMCAgADGQEAAgWKak04t07Rv7t5u7pyiiOCTyXCovoAAkIAA1m7_CXewW-gOz9b0QEAB20AAzoE",
+                    "file_unique_id": "AQADQgADWbv8JXI",
+                    "file_size": 4378,
+                    "width": 128,
+                    "height": 128
+                },
+                "file_id": "CAACAgIAAxkBAAIFimpNOLdO0b-7ebu6coojgk8lwqL6AAJCAANZu_wl3sFvoDs_W9E6BA",
+                "file_unique_id": "AgADQgADWbv8JQ",
+                "file_size": 16441
+            }
+        }
+    },
+    // type image
+    {
+        "update_id": 8231968,
+        "message": {
+            "message_id": 1419,
+            "from": {
+                "id": 7278484727,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Minha",
+                "last_name": "Venus ❤️",
+                "user_status": "online"
+            },
+            "chat": {
+                "id": 7278484727,
+                "first_name": "Minha",
+                "last_name": "Venus ❤️",
+                "type": "private",
+                "user_status": "online"
+            },
+            "date": 1783445739,
+            "is_outgoing": false,
+            "photo": [
+                {
+                    "file_id": "AgACAgEAAxkBAAIFi2pNOOslI325nU_x8k7NkTrahuCxAALMDGsbRE5oRpZushP8lvJAAQADAgADbQADOgQ",
+                    "file_unique_id": "AQADzAxrG0ROaEZy",
+                    "file_size": 4004,
+                    "width": 320,
+                    "height": 160
+                },
+                {
+                    "file_id": "AgACAgEAAxkBAAIFi2pNOOslI325nU_x8k7NkTrahuCxAALMDGsbRE5oRpZushP8lvJAAQADAgADeAADOgQ",
+                    "file_unique_id": "AQADzAxrG0ROaEZ9",
+                    "file_size": 11568,
+                    "width": 800,
+                    "height": 400
+                },
+                {
+                    "file_id": "AgACAgEAAxkBAAIFi2pNOOslI325nU_x8k7NkTrahuCxAALMDGsbRE5oRpZushP8lvJAAQADAgADeQADOgQ",
+                    "file_unique_id": "AQADzAxrG0ROaEZ-",
+                    "file_size": 17005,
+                    "width": 1179,
+                    "height": 590
+                }
+            ]
+        }
+    },
+    // type image - com caption
+    {
+        "update_id": 8232125,
+        "message": {
+            "message_id": 1602,
+            "from": {
+                "id": 5425710484,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Leonardo",
+                "last_name": "Araujo da Silva",
+                "username": "leoaraujo98",
+                "user_status": "online"
+            },
+            "chat": {
+                "id": 8989074661,
+                "first_name": "Alex Sm",
+                "type": "private",
+                "user_status": "online",
+                "is_premium": true
+            },
+            "date": 1783951115,
+            "is_outgoing": true,
+            "photo": [
+                {
+                    "file_id": "AgACAgEAAxkDAAIGQmpU7wsLdcxyeg0p3XTWv3nLGdzsAAIHDWsbRMKoRoNwhmsPBqgdAQADAgADbQADOgQ",
+                    "file_unique_id": "AQADBw1rG0TCqEZy",
+                    "file_size": 17322,
+                    "width": 255,
+                    "height": 320
+                },
+                {
+                    "file_id": "AgACAgEAAxkDAAIGQmpU7wsLdcxyeg0p3XTWv3nLGdzsAAIHDWsbRMKoRoNwhmsPBqgdAQADAgADeAADOgQ",
+                    "file_unique_id": "AQADBw1rG0TCqEZ9",
+                    "file_size": 61200,
+                    "width": 637,
+                    "height": 800
+                },
+                {
+                    "file_id": "AgACAgEAAxkDAAIGQmpU7wsLdcxyeg0p3XTWv3nLGdzsAAIHDWsbRMKoRoNwhmsPBqgdAQADAgADeQADOgQ",
+                    "file_unique_id": "AQADBw1rG0TCqEZ-",
+                    "file_size": 95676,
+                    "width": 1020,
+                    "height": 1280
+                }
+            ],
+            "caption": "Com caption"
+        }
+    },
+    // type video
+    {
+        "update_id": 8231969,
+        "message": {
+            "message_id": 1420,
+            "from": {
+                "id": 7278484727,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Minha",
+                "last_name": "Venus ❤️",
+                "user_status": "online"
+            },
+            "chat": {
+                "id": 7278484727,
+                "first_name": "Minha",
+                "last_name": "Venus ❤️",
+                "type": "private",
+                "user_status": "online"
+            },
+            "date": 1783445792,
+            "is_outgoing": false,
+            "video": {
+                "duration": 7,
+                "width": 720,
+                "height": 1280,
+                "mime_type": "video/mp4",
+                "thumbnail": {
+                    "file_id": "AAMCAQADGQEAAgWMak05IFNKg8-9A9pPED6fOAUzE4EAAnMGAAJETmhG3orRIdHwzxkBAAdtAAM6BA",
+                    "file_unique_id": "AQADcwYAAkROaEZy",
+                    "file_size": 13951,
+                    "width": 180,
+                    "height": 320
+                },
+                "thumb": {
+                    "file_id": "AAMCAQADGQEAAgWMak05IFNKg8-9A9pPED6fOAUzE4EAAnMGAAJETmhG3orRIdHwzxkBAAdtAAM6BA",
+                    "file_unique_id": "AQADcwYAAkROaEZy",
+                    "file_size": 13951,
+                    "width": 180,
+                    "height": 320
+                },
+                "file_id": "BAACAgEAAxkBAAIFjGpNOSBTSoPPvQPaTxA-nzgFMxOBAAJzBgACRE5oRt6K0SHR8M8ZOgQ",
+                "file_unique_id": "AgADcwYAAkROaEY",
+                "file_size": 2099833
+            }
+        }
+    },
+    // type files
+    {
+        "update_id": 8231970,
+        "message": {
+            "message_id": 1421,
+            "from": {
+                "id": 7278484727,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Minha",
+                "last_name": "Venus ❤️",
+                "user_status": "online"
+            },
+            "chat": {
+                "id": 7278484727,
+                "first_name": "Minha",
+                "last_name": "Venus ❤️",
+                "type": "private",
+                "user_status": "online"
+            },
+            "date": 1783445924,
+            "is_outgoing": false,
+            "document": {
+                "file_name": "CamScanner 03-07-2026 07.37.pdf",
+                "mime_type": "application/pdf",
+                "file_id": "BQACAgEAAxkBAAIFjWpNOaOGeWgTrVADu6No26-cixhaAAJ1BgACRE5oRoytqd2YzFWcOgQ",
+                "file_unique_id": "AgADdQYAAkROaEY",
+                "file_size": 411373
+            }
+        }
+    },
+    // type fixed location
+    {
+        "update_id": 8231972,
+        "message": {
+            "message_id": 1423,
+            "from": {
+                "id": 7278484727,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Minha",
+                "last_name": "Venus ❤️",
+                "user_status": "online"
+            },
+            "chat": {
+                "id": 7278484727,
+                "first_name": "Minha",
+                "last_name": "Venus ❤️",
+                "type": "private",
+                "user_status": "online"
+            },
+            "date": 1783446093,
+            "is_outgoing": false,
+            "location": {
+                "latitude": -23.492922,
+                "longitude": -46.642205
+            }
+        }
+    },
+    // type real-time location
+    {
+        "update_id": 8231973,
+        "message": {
+            "message_id": 1424,
+            "from": {
+                "id": 7278484727,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Minha",
+                "last_name": "Venus ❤️",
+                "user_status": "online"
+            },
+            "chat": {
+                "id": 7278484727,
+                "first_name": "Minha",
+                "last_name": "Venus ❤️",
+                "type": "private",
+                "user_status": "online"
+            },
+            "date": 1783446161,
+            "is_outgoing": false,
+            "location": {
+                "latitude": -23.492922,
+                "longitude": -46.642205,
+                "live_period": 900
+            }
+        }
+    },
+    // update location permission
+    {
+        "update_id": 8231975,
+        "edited_message": {
+            "message_id": 1424,
+            "from": {
+                "id": 7278484727,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Minha",
+                "last_name": "Venus ❤️",
+                "user_status": "online"
+            },
+            "chat": {
+                "id": 7278484727,
+                "first_name": "Minha",
+                "last_name": "Venus ❤️",
+                "type": "private",
+                "user_status": "online"
+            },
+            "date": 1783446161,
+            "is_outgoing": false,
+            "edit_date": 1783446238,
+            "location": {
+                "latitude": -23.492909,
+                "longitude": -46.642194,
+                "live_period": 29700,
+                "horizontal_accuracy": 3
+            }
+        }
+    },
+    // this revoke permission
+    {
+        "update_id": 8231977,
+        "edited_message": {
+            "message_id": 1424,
+            "from": {
+                "id": 7278484727,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Minha",
+                "last_name": "Venus ❤️",
+                "user_status": "online"
+            },
+            "chat": {
+                "id": 7278484727,
+                "first_name": "Minha",
+                "last_name": "Venus ❤️",
+                "type": "private",
+                "user_status": "online"
+            },
+            "date": 1783446161,
+            "is_outgoing": false,
+            "edit_date": 1783446310,
+            "location": {
+                "latitude": -23.492909,
+                "longitude": -46.642194,
+                "horizontal_accuracy": 3
+            }
+        }
+    },
+    // type contact vcard
+    {
+        "update_id": 8231978,
+        "message": {
+            "message_id": 1425,
+            "from": {
+                "id": 7278484727,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Minha",
+                "last_name": "Venus ❤️",
+                "user_status": "online"
+            },
+            "chat": {
+                "id": 7278484727,
+                "first_name": "Minha",
+                "last_name": "Venus ❤️",
+                "type": "private",
+                "user_status": "online"
+            },
+            "date": 1783446425,
+            "is_outgoing": false,
+            "contact": {
+                "phone_number": "944446538",
+                "first_name": "cabeça de penes",
+                "last_name": "🖤",
+                "vcard": "BEGIN:VCARD VERSION: 2.1 N;CHARSET=UTF-8;ENCODING=QUOTED-PRINTABLE:=F0=9F=96=A4;=63=61=62=65=C3=A7=61=20=64=65;=70=65=6E=65=73;; FN;CHARSET=UTF-8;ENCODING=QUOTED-PRINTABLE:=63=61=62=65=C3=A7=61=20=64=65=20=70=65=6E=65=73=20=F0=9F=96=A4 TEL;CELL;PREF: 944446538 END:VCARD"
+            }
+        }
+    },
+    // type audio (music)
+    {
+        "update_id": 8231979,
+        "message": {
+            "message_id": 1426,
+            "from": {
+                "id": 7278484727,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Minha",
+                "last_name": "Venus ❤️",
+                "user_status": "online"
+            },
+            "chat": {
+                "id": 7278484727,
+                "first_name": "Minha",
+                "last_name": "Venus ❤️",
+                "type": "private",
+                "user_status": "online"
+            },
+            "date": 1783446628,
+            "is_outgoing": false,
+            "audio": {
+                "duration": 200,
+                "file_name": "Over_the_Horizon.m4a",
+                "mime_type": "audio/m4a",
+                "title": "Over the Horizon",
+                "performer": "Samsung",
+                "thumbnail": {
+                    "file_id": "AAMCAQADGQEAAgWSak08ZC-MAAG_Mn80_yzCjvgq-WblAAJ5BgACRE5oRuoTcvjkdwEtAQAHbQADOgQ",
+                    "file_unique_id": "AQADeQYAAkROaEZy",
+                    "file_size": 3018,
+                    "width": 132,
+                    "height": 132
+                },
+                "thumb": {
+                    "file_id": "AAMCAQADGQEAAgWSak08ZC-MAAG_Mn80_yzCjvgq-WblAAJ5BgACRE5oRuoTcvjkdwEtAQAHbQADOgQ",
+                    "file_unique_id": "AQADeQYAAkROaEZy",
+                    "file_size": 3018,
+                    "width": 132,
+                    "height": 132
+                },
+                "file_id": "CQACAgEAAxkBAAIFkmpNPGQvjAABvzJ_NP8swo74Kvlm5QACeQYAAkROaEbqE3L45HcBLToE",
+                "file_unique_id": "AgADeQYAAkROaEY",
+                "file_size": 20145407
+            }
+        }
+    },
+    // type gif
+    {
+        "update_id": 8231981,
+        "message": {
+            "message_id": 1429,
+            "from": {
+                "id": 7278484727,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Minha",
+                "last_name": "Venus ❤️",
+                "user_status": "online"
+            },
+            "chat": {
+                "id": 7278484727,
+                "first_name": "Minha",
+                "last_name": "Venus ❤️",
+                "type": "private",
+                "user_status": "online"
+            },
+            "date": 1783447078,
+            "is_outgoing": false,
+            "animation": {
+                "mime_type": "video/mp4",
+                "duration": 2,
+                "width": 736,
+                "height": 640,
+                "thumbnail": {
+                    "file_id": "AAMCAgADGQEAAgWVak0-Jjb1zTdDKjHz2k3vcaYJkzIAAlsWAAL_Q0lIdn5g23hnC4QBAAdtAAM6BA",
+                    "file_unique_id": "AQADWxYAAv9DSUhy",
+                    "file_size": 13681,
+                    "width": 320,
+                    "height": 278
+                },
+                "thumb": {
+                    "file_id": "AAMCAgADGQEAAgWVak0-Jjb1zTdDKjHz2k3vcaYJkzIAAlsWAAL_Q0lIdn5g23hnC4QBAAdtAAM6BA",
+                    "file_unique_id": "AQADWxYAAv9DSUhy",
+                    "file_size": 13681,
+                    "width": 320,
+                    "height": 278
+                },
+                "file_id": "CgACAgIAAxkBAAIFlWpNPiY29c03Qyox89pN73GmCZMyAAJbFgAC_0NJSHZ-YNt4ZwuEOgQ",
+                "file_unique_id": "AgADWxYAAv9DSUg",
+                "file_size": 55143
+            },
+            "document": {
+                "mime_type": "video/mp4",
+                "thumbnail": {
+                    "file_id": "AAMCAgADGQEAAgWVak0-Jjb1zTdDKjHz2k3vcaYJkzIAAlsWAAL_Q0lIdn5g23hnC4QBAAdtAAM6BA",
+                    "file_unique_id": "AQADWxYAAv9DSUhy",
+                    "file_size": 13681,
+                    "width": 320,
+                    "height": 278
+                },
+                "thumb": {
+                    "file_id": "AAMCAgADGQEAAgWVak0-Jjb1zTdDKjHz2k3vcaYJkzIAAlsWAAL_Q0lIdn5g23hnC4QBAAdtAAM6BA",
+                    "file_unique_id": "AQADWxYAAv9DSUhy",
+                    "file_size": 13681,
+                    "width": 320,
+                    "height": 278
+                },
+                "file_id": "CgACAgIAAxkBAAIFlWpNPiY29c03Qyox89pN73GmCZMyAAJbFgAC_0NJSHZ-YNt4ZwuEOgQ",
+                "file_unique_id": "AgADWxYAAv9DSUg",
+                "file_size": 55143
+            }
+        }
+    },
+    // type video-note
+    {
+        "update_id": 226226578,
+        "message": {
+            "message_id": 17,
+            "from": {
+                "id": 5425710484,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "user_status": "online"
+            },
+            "chat": {
+                "id": 5425710484,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "type": "private",
+                "user_status": "online"
+            },
+            "date": 1783951968,
+            "is_outgoing": false,
+            "video_note": {
+                "duration": 4,
+                "length": 384,
+                "thumbnail": {
+                    "file_id": "AAMCAQADGQEAAxFqVPJg2i7-CqDjXtN48Ug3cAQetQACMAcAAkTCqEaPGvxTVZ_kzwEAB20AAzoE",
+                    "file_unique_id": "AQADMAcAAkTCqEZy",
+                    "file_size": 8378,
+                    "width": 320,
+                    "height": 320
+                },
+                "thumb": {
+                    "file_id": "AAMCAQADGQEAAxFqVPJg2i7-CqDjXtN48Ug3cAQetQACMAcAAkTCqEaPGvxTVZ_kzwEAB20AAzoE",
+                    "file_unique_id": "AQADMAcAAkTCqEZy",
+                    "file_size": 8378,
+                    "width": 320,
+                    "height": 320
+                },
+                "file_id": "DQACAgEAAxkBAAMRalTyYNou_gqg417TePFIN3AEHrUAAjAHAAJEwqhGjxr8U1Wf5M86BA",
+                "file_unique_id": "AgADMAcAAkTCqEY",
+                "file_size": 343055
+            }
+        }
+    },
+    // type checklist
+    {
+        "update_id": 8231997,
+        "message": {
+            "message_id": 1436,
+            "from": {
+                "id": 8989074661,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Alex Sm",
+                "is_premium": true,
+                "user_status": "online"
+            },
+            "chat": {
+                "id": 8989074661,
+                "first_name": "Alex Sm",
+                "type": "private",
+                "user_status": "online",
+                "is_premium": true
+            },
+            "date": 1783706154,
+            "is_outgoing": false,
+            "checklist": {
+                "title": "Teste hook lista",
+                "tasks": [
+                    {
+                        "id": 1,
+                        "text": "Testar"
+                    },
+                    {
+                        "id": 2,
+                        "text": "Lista😄",
+                        "text_entities": [
+                            {
+                                "offset": 5,
+                                "length": 2,
+                                "type": "custom_emoji",
+                                "custom_emoji_id": "5411174771620585784"
+                            }
+                        ]
+                    }
+                ],
+                "others_can_add_tasks": true,
+                "others_can_mark_tasks_as_done": true
+            }
+        }
+    },
+    // type checklist updated
+    {
+        "update_id": 8232093,
+        "message": {
+            "message_id": 1513,
+            "from": {
+                "id": 8989074661,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Alex Sm",
+                "is_premium": true,
+                "user_status": "online"
+            },
+            "chat": {
+                "id": 8989074661,
+                "first_name": "Alex Sm",
+                "type": "private",
+                "user_status": "online",
+                "is_premium": true
+            },
+            "date": 1783707874,
+            "is_outgoing": false,
+            "checklist_tasks_done": {
+                "checklist_message": {
+                    "message_id": 1436,
+                    "from": {
+                        "id": 8989074661,
+                        "is_bot": false,
+                        "is_deleted": false,
+                        "first_name": "Alex Sm",
+                        "is_premium": true,
+                        "user_status": "online"
+                    },
+                    "chat": {
+                        "id": 8989074661,
+                        "first_name": "Alex Sm",
+                        "type": "private",
+                        "user_status": "online",
+                        "is_premium": true
+                    },
+                    "date": 1783706154,
+                    "is_outgoing": false,
+                    "checklist": {
+                        "title": "Teste hook lista",
+                        "tasks": [
+                            {
+                                "id": 1,
+                                "text": "Testar",
+                                "completed_by_user": {
+                                    "id": 8989074661,
+                                    "is_bot": false,
+                                    "is_deleted": false,
+                                    "first_name": "Alex Sm",
+                                    "is_premium": true,
+                                    "user_status": "online"
+                                },
+                                "completion_date": 1783707874
+                            },
+                            {
+                                "id": 2,
+                                "text": "Lista😄",
+                                "text_entities": [
+                                    {
+                                        "offset": 5,
+                                        "length": 2,
+                                        "type": "custom_emoji",
+                                        "custom_emoji_id": "5411174771620585784"
+                                    }
+                                ]
+                            }
+                        ],
+                        "others_can_add_tasks": true,
+                        "others_can_mark_tasks_as_done": true
+                    }
+                },
+                "marked_as_done_task_ids": [
+                    1
+                ]
+            }
+        }
+    },
+    // type - deleted
+    {
+        "update_id": 993143426,
+        "deleted_messages": {
+            "chat": {
+                "id": 5425710484,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "type": "private",
+                "user_status": "online"
+            },
+            "message_ids": [
+                19
+            ]
+        }
+    },
+    // type quoted message
+    {
+        "update_id": 993143428,
+        "message": {
+            "message_id": 21,
+            "from": {
+                "id": 5425710484,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "user_status": "online"
+            },
+            "chat": {
+                "id": 5425710484,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "type": "private",
+                "user_status": "online"
+            },
+            "date": 1783953647,
+            "is_outgoing": false,
+            "reply_to_message": {
+                "message_id": 18,
+                "from": {
+                    "id": 8989074661,
+                    "is_bot": false,
+                    "is_deleted": false,
+                    "first_name": "SM CLICK",
+                    "is_premium": true,
+                    "user_status": "online"
+                },
+                "chat": {
+                    "id": 5425710484,
+                    "first_name": "Leo Cel",
+                    "last_name": "Novo",
+                    "username": "leoaraujo98",
+                    "type": "private",
+                    "user_status": "online"
+                },
+                "date": 1783953182,
+                "is_outgoing": true,
+                "text": "Teste"
+            },
+            "text": "Opaaa"
+        }
+    },
+    // message quoted in a specific location
+    {
+        "update_id": 993143430,
+        "message": {
+            "message_id": 23,
+            "from": {
+                "id": 5425710484,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "user_status": "online"
+            },
+            "chat": {
+                "id": 5425710484,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "type": "private",
+                "user_status": "online"
+            },
+            "date": 1783954262,
+            "is_outgoing": false,
+            "reply_to_message": {
+                "message_id": 18,
+                "from": {
+                    "id": 8989074661,
+                    "is_bot": false,
+                    "is_deleted": false,
+                    "first_name": "SM CLICK",
+                    "is_premium": true,
+                    "user_status": "offline",
+                    "last_seen": 1783953679
+                },
+                "chat": {
+                    "id": 5425710484,
+                    "first_name": "Leo Cel",
+                    "last_name": "Novo",
+                    "username": "leoaraujo98",
+                    "type": "private",
+                    "user_status": "online"
+                },
+                "date": 1783953182,
+                "is_outgoing": true,
+                "text": "Teste"
+            },
+            "quote": {
+                "text": "te",
+                "position": 3,
+                "is_manual": true
+            },
+            "text": "Testeeee citação"
+        }
+    },
+]
