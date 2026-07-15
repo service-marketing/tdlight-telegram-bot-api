@@ -823,5 +823,77 @@
             },
             "text": "Esse trecho"
         }
+    },
+    // type poll
+    {
+        "update_id": 993143529,
+        "message": {
+            "message_id": 121,
+            "from": {
+                "id": 8989074661,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "SM CLICK",
+                "is_premium": true,
+                "user_status": "online"
+            },
+            "chat": {
+                "id": -5558416090,
+                "title": "Teste cria\u00e7\u00e3o",
+                "type": "group",
+                "all_members_are_administrators": false,
+                "accepted_gift_types": {
+                    "unlimited_gifts": false,
+                    "limited_gifts": false,
+                    "unique_gifts": false,
+                    "premium_subscription": false,
+                    "gifts_from_channels": false
+                }
+            },
+            "date": 1784126052,
+            "is_outgoing": true,
+            "poll": {
+                "id": "5096030880556646863",
+                "question": "Perguntas",
+                "options": [
+                    {
+                        "text": "Pergunta 1",
+                        "voter_count": 0
+                    },
+                    {
+                        "text": "Pergunta 2",
+                        "voter_count": 0
+                    }
+                ],
+                "total_voter_count": 0,
+                "is_closed": false,
+                "is_anonymous": false,
+                "type": "regular",
+                "allows_multiple_answers": true
+            }
+        }
+    },
+    // type poll answer
+    {
+        "update_id": 993143530,
+        "poll": {
+            "id": "5096030880556646863",
+            "question": "Perguntas",
+            "options": [
+                {
+                    "text": "Pergunta 1",
+                    "voter_count": 1
+                },
+                {
+                    "text": "Pergunta 2",
+                    "voter_count": 0
+                }
+            ],
+            "total_voter_count": 1,
+            "is_closed": false,
+            "is_anonymous": false,
+            "type": "regular",
+            "allows_multiple_answers": true
+        }
     }
 ]

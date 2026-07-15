@@ -934,5 +934,94 @@
             },
             "text": "Citação"
         }
+    },
+    // type poll
+    {
+        "update_id": 993143526,
+        "message": {
+            "message_id": 120,
+            "from": {
+                "id": 5425710484,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "user_status": "online"
+            },
+            "chat": {
+                "id": -5558416090,
+                "title": "Teste cria\u00e7\u00e3o",
+                "type": "group",
+                "all_members_are_administrators": false,
+                "accepted_gift_types": {
+                    "unlimited_gifts": false,
+                    "limited_gifts": false,
+                    "unique_gifts": false,
+                    "premium_subscription": false,
+                    "gifts_from_channels": false
+                }
+            },
+            "date": 1784125554,
+            "is_outgoing": false,
+            "poll": {
+                "id": "5096030880556646862",
+                "question": "Opa",
+                "options": [
+                    {
+                        "text": "A",
+                        "voter_count": 0
+                    },
+                    {
+                        "text": "A",
+                        "voter_count": 0
+                    },
+                    {
+                        "text": "A",
+                        "voter_count": 0
+                    },
+                    {
+                        "text": "A",
+                        "voter_count": 0
+                    }
+                ],
+                "total_voter_count": 0,
+                "is_closed": false,
+                "is_anonymous": false,
+                "type": "regular",
+                "allows_multiple_answers": true
+            }
+        }
+    },
+    // type poll answer
+    {
+        "update_id": 993143527,
+        "poll": {
+            "id": "5096030880556646862",
+            "question": "Opa",
+            "options": [
+                {
+                    "text": "A",
+                    "voter_count": 0
+                },
+                {
+                    "text": "A",
+                    "voter_count": 0
+                },
+                {
+                    "text": "A",
+                    "voter_count": 0
+                },
+                {
+                    "text": "A",
+                    "voter_count": 0
+                }
+            ],
+            "total_voter_count": 1,
+            "is_closed": false,
+            "is_anonymous": false,
+            "type": "regular",
+            "allows_multiple_answers": true
+        }
     }
 ]

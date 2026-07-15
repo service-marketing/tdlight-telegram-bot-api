@@ -7,6 +7,7 @@ Cada webhook chega como um `Update` (objeto do Bot API). Sempre tem `update_id` 
 | `message` | Mensagem nova (recebida ou enviada pela própria conta) |
 | `edited_message` | Mensagem existente foi editada (inclui atualização/revogação de localização em tempo real) |
 | `deleted_messages` | Uma ou mais mensagens foram apagadas |
+| `poll` | Estado de uma enquete mudou (voto registrado, fechamento etc.) — não vem dentro de `message` |
 
 Exemplos completos em [exemplos/](exemplos/): [criacao-de-chats.md](criacao-de-chats.md) · [chats-individuais.md](chats-individuais.md) · [grupos.md](grupos.md) · [mensagens-enviadas-recebidas.md](mensagens-enviadas-recebidas.md).
 
@@ -70,6 +71,7 @@ Cada `message` tem **um** campo de conteúdo (`text`, `voice`, `sticker`, `photo
 | `contact` | Contato | `{phone_number, first_name, last_name?, vcard?, user_id?}` |
 | `checklist` | Lista de tarefas | `{title, tasks: [{id, text, text_entities?}], others_can_add_tasks, others_can_mark_tasks_as_done}` |
 | `checklist_tasks_done` | Tarefa(s) da lista marcada(s) como concluída(s) | `{checklist_message: Message, marked_as_done_task_ids: [Integer, ...]}` — `checklist_message` é a mensagem original do checklist, já com `completed_by_user` e `completion_date` preenchidos nas tarefas concluídas |
+| `poll` | Enquete criada nessa mensagem | `{id, question, options: [{text, voter_count}, ...], total_voter_count, is_closed, is_anonymous, type, allows_multiple_answers}` |
 
 `thumbnail` e `thumb` sempre vêm duplicados com o mesmo conteúdo (campo legado mantido por compatibilidade) — pode usar qualquer um dos dois.
 
@@ -100,4 +102,31 @@ Não é `message`, é update de nível superior:
 ```
 
 `message_ids` pode conter mais de um ID (apagou várias de uma vez).
+
+## Atualização de estado de enquete (`poll` no nível superior)
+
+Não é `message`, é update de nível superior — mesmo objeto `Poll` da criação (`message.poll`), sem `question`/`chat` associado direto no update, disparado a cada mudança de estado (voto novo, fechamento):
+
+```json
+{
+  "update_id": 993143527,
+  "poll": {
+    "id": "5096030880556646862",
+    "question": "Opa",
+    "options": [
+      { "text": "A", "voter_count": 0 },
+      { "text": "A", "voter_count": 0 },
+      { "text": "A", "voter_count": 0 },
+      { "text": "A", "voter_count": 1 }
+    ],
+    "total_voter_count": 1,
+    "is_closed": false,
+    "is_anonymous": false,
+    "type": "regular",
+    "allows_multiple_answers": true
+  }
+}
+```
+
+Correlacionar com a enquete original pelo campo `id`. `total_voter_count` e os `voter_count` de cada opção refletem o estado acumulado (não é um diff).
 </content>

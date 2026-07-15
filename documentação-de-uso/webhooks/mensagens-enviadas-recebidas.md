@@ -26,7 +26,9 @@ Em ambos os casos, `chat` é sempre o chat onde a mensagem está (não muda conf
 }
 ```
 
-Todos os tipos de conteúdo (`text`, `voice`, `sticker`, `photo`, `video`, `document`, `contact`, `audio`, GIF, `video_note`, `checklist`, `checklist_tasks_done`) seguem a mesma estrutura documentada em [chats-individuais.md](chats-individuais.md), só com `is_outgoing: true`. Não repetido aqui.
+Todos os tipos de conteúdo (`text`, `voice`, `sticker`, `photo`, `video`, `document`, `contact`, `audio`, GIF, `video_note`, `checklist`, `checklist_tasks_done`, `poll`) seguem a mesma estrutura documentada em [chats-individuais.md](chats-individuais.md), só com `is_outgoing: true`. Não repetido aqui.
+
+Enquete enviada gera o mesmo update `poll` de nível superior (voto/estado) quando alguém responde, mesmo com a enquete tendo sido criada com `is_outgoing: true` — ver [README.md](README.md#atualização-de-estado-de-enquete-poll-no-nível-superior).
 
 ## Localização em tempo real enviada — ciclo completo
 

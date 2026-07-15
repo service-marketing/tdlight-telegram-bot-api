@@ -22,7 +22,9 @@ Não tem `first_name`/`last_name`/`username`/`user_status` no nível do chat (is
 
 ## Tipos de conteúdo
 
-Todos os tipos (`text`, `voice`, `sticker`, `photo`, `video`, `document`, `location` fixa/tempo real, `contact`, `audio`, GIF, `video_note`, `checklist`, `checklist_tasks_done`, `deleted_messages`, `reply_to_message`/`quote`) seguem exatamente a mesma estrutura documentada em [chats-individuais.md](chats-individuais.md) — só troca o `chat` pelo objeto de grupo acima. Não repetido aqui.
+Todos os tipos (`text`, `voice`, `sticker`, `photo`, `video`, `document`, `location` fixa/tempo real, `contact`, `audio`, GIF, `video_note`, `checklist`, `checklist_tasks_done`, `deleted_messages`, `reply_to_message`/`quote`, `poll`) seguem exatamente a mesma estrutura documentada em [chats-individuais.md](chats-individuais.md) — só troca o `chat` pelo objeto de grupo acima. Não repetido aqui.
+
+A atualização de estado da enquete (voto, update `poll` de nível superior — sem `message` por volta) está documentada em [README.md](README.md#atualização-de-estado-de-enquete-poll-no-nível-superior).
 
 Uma diferença observada no exemplo de grupo: o GIF chegou só com `document` (sem o campo `animation` junto) — ao contrário do exemplo privado/enviado, onde vêm os dois. Trate `animation` como opcional; a mídia de vídeo mudo curto pode chegar só como `document` com `mime_type: "image/gif"`.
 
