@@ -26,6 +26,12 @@ Todos os tipos (`text`, `voice`, `sticker`, `photo`, `video`, `document`, `locat
 
 A atualização de estado da enquete (voto, update `poll` de nível superior — sem `message` por volta) está documentada em [README.md](README.md#atualização-de-estado-de-enquete-poll-no-nível-superior).
 
+Menção a membro do grupo por nome (sem `@username`) vem como `entities` do tipo `text_mention` — ver [README.md](README.md#entidades-de-texto-entities).
+
+## Entrada e saída de membros
+
+Eventos de sistema específicos de grupo — ver [criacao-de-chats.md](criacao-de-chats.md#entrada-de-membro-no-grupo) para `new_chat_participant`/`new_chat_member`/`new_chat_members` (entrada) e [criacao-de-chats.md](criacao-de-chats.md#saída-de-membro-do-grupo) para `left_chat_participant`/`left_chat_member` (saída).
+
 Uma diferença observada no exemplo de grupo: o GIF chegou só com `document` (sem o campo `animation` junto) — ao contrário do exemplo privado/enviado, onde vêm os dois. Trate `animation` como opcional; a mídia de vídeo mudo curto pode chegar só como `document` com `mime_type: "image/gif"`.
 
 ## Criação do grupo

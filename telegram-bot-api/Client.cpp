@@ -1749,11 +1749,11 @@ class Client::JsonSuggestedPostPrice final : public td::Jsonable {
         object("currency", "XTR");
         object("amount", static_cast<const td_api::suggestedPostPriceStar *>(suggested_post_price_)->star_count_);
         break;
-      case td_api::suggestedPostPriceTon::ID:
+      case td_api::suggestedPostPriceGram::ID:
         object("currency", "TON");
         object(
             "amount",
-            static_cast<const td_api::suggestedPostPriceTon *>(suggested_post_price_)->toncoin_cent_count_ * 10000000);
+            static_cast<const td_api::suggestedPostPriceGram *>(suggested_post_price_)->gram_cent_count_ * 10000000);
         break;
       default:
         UNREACHABLE();
@@ -2381,7 +2381,7 @@ class Client::JsonPoll final : public td::Jsonable {
         object("type", "quiz");
         object("allows_multiple_answers", td::JsonFalse());
         auto quiz = static_cast<const td_api::pollTypeQuiz *>(poll_->type_.get());
-        int32 correct_option_id = quiz->correct_option_id_;
+        int32 correct_option_id = quiz->correct_option_ids_.empty() ? -1 : quiz->correct_option_ids_[0];
         if (correct_option_id != -1) {
           object("correct_option_id", correct_option_id);
         }
@@ -2394,8 +2394,7 @@ class Client::JsonPoll final : public td::Jsonable {
       }
       case td_api::pollTypeRegular::ID:
         object("type", "regular");
-        object("allows_multiple_answers",
-               td::JsonBool(static_cast<const td_api::pollTypeRegular *>(poll_->type_.get())->allow_multiple_answers_));
+        object("allows_multiple_answers", td::JsonBool(poll_->allows_multiple_answers_));
         break;
       default:
         UNREACHABLE();
@@ -2430,7 +2429,7 @@ class Client::JsonPollAnswer final : public td::Jsonable {
       default:
         UNREACHABLE();
     }
-    object("option_ids", td::json_array(poll_answer_->option_ids_, [](int32 option_id) { return option_id; }));
+    object("option_ids", td::json_array(poll_answer_->option_positions_, [](int32 option_id) { return option_id; }));
   }
 
  private:
@@ -2641,7 +2640,7 @@ class Client::JsonSuggestedPostPaid final : public td::Jsonable {
       object("star_amount", JsonStarAmount(suggested_post_paid_->star_amount_.get()));
     } else {
       object("currency", "TON");
-      object("amount", suggested_post_paid_->ton_amount_);
+      object("amount", suggested_post_paid_->gram_amount_);
     }
   }
 
@@ -3108,10 +3107,10 @@ class Client::JsonUniqueGiftMessage final : public td::Jsonable {
             object("last_resale_amount", price->star_count_);
             break;
           }
-          case td_api::giftResalePriceTon::ID: {
-            auto price = static_cast<const td_api::giftResalePriceTon *>(origin->price_.get());
+          case td_api::giftResalePriceGram::ID: {
+            auto price = static_cast<const td_api::giftResalePriceGram *>(origin->price_.get());
             object("last_resale_currency", "TON");
-            object("last_resale_amount", price->toncoin_cent_count_ * 10000000);
+            object("last_resale_amount", price->gram_cent_count_ * 10000000);
             break;
           }
           default:
@@ -3910,8 +3909,15 @@ class Client::JsonExternalReplyInfo final : public td::Jsonable {
         }
         case td_api::messageLocation::ID: {
           auto content = static_cast<const td_api::messageLocation *>(reply_->content_.get());
-          object("location", JsonLocation(content->location_.get(), content->expires_in_, content->live_period_,
-                                          content->heading_, content->proximity_alert_radius_));
+          object("location", JsonLocation(content->location_.get()));
+          break;
+        }
+        case td_api::messageLiveLocation::ID: {
+          auto content = static_cast<const td_api::messageLiveLocation *>(reply_->content_.get());
+          auto *live_location = content->location_.get();
+          object("location", JsonLocation(live_location->location_.get(), content->expires_in_,
+                                          live_location->live_period_, live_location->heading_,
+                                          live_location->proximity_alert_radius_));
           break;
         }
         case td_api::messageStakeDice::ID: {
@@ -4199,8 +4205,15 @@ void Client::JsonMessage::store(td::JsonValueScope *scope) const {
     }
     case td_api::messageLocation::ID: {
       auto content = static_cast<const td_api::messageLocation *>(message_->content.get());
-      object("location", JsonLocation(content->location_.get(), content->expires_in_, content->live_period_,
-                                      content->heading_, content->proximity_alert_radius_));
+      object("location", JsonLocation(content->location_.get()));
+      break;
+    }
+    case td_api::messageLiveLocation::ID: {
+      auto content = static_cast<const td_api::messageLiveLocation *>(message_->content.get());
+      auto *live_location = content->location_.get();
+      object("location", JsonLocation(live_location->location_.get(), content->expires_in_,
+                                      live_location->live_period_, live_location->heading_,
+                                      live_location->proximity_alert_radius_));
       break;
     }
     case td_api::messageStakeDice::ID: {
@@ -5502,6 +5515,21 @@ class Client::JsonDeletedMessages final : public td::Jsonable {
   const Client *client_;
 };
 
+class Client::JsonChatJoined final : public td::Jsonable {
+ public:
+  JsonChatJoined(int64 chat_id, const Client *client) : chat_id_(chat_id), client_(client) {
+  }
+  void store(td::JsonValueScope *scope) const {
+    auto object = scope->enter_object();
+    object("chat", JsonChat(chat_id_, client_));
+    object("date", client_->get_unix_time());
+  }
+
+ private:
+  int64 chat_id_;
+  const Client *client_;
+};
+
 class Client::JsonReceivedGift final : public td::Jsonable {
  public:
   JsonReceivedGift(const td_api::receivedGift *received_gift, bool can_be_managed, const Client *client)
@@ -5956,17 +5984,17 @@ class Client::JsonStickerSet final : public td::Jsonable {
 
 class Client::JsonSentWebAppMessage final : public td::Jsonable {
  public:
-  explicit JsonSentWebAppMessage(const td_api::sentWebAppMessage *message) : message_(message) {
+  explicit JsonSentWebAppMessage(const td_api::inlineMessageId *message) : message_(message) {
   }
   void store(td::JsonValueScope *scope) const {
     auto object = scope->enter_object();
-    if (!message_->inline_message_id_.empty()) {
-      object("inline_message_id", message_->inline_message_id_);
+    if (!message_->id_.empty()) {
+      object("inline_message_id", message_->id_);
     }
   }
 
  private:
-  const td_api::sentWebAppMessage *message_;
+  const td_api::inlineMessageId *message_;
 };
 
 class Client::JsonPreparedInlineMessageId final : public td::Jsonable {
@@ -7837,8 +7865,8 @@ class Client::TdOnAnswerWebAppQueryCallback final : public TdQueryCallback {
       return fail_query_with_error(std::move(query_), move_object_as<td_api::error>(result));
     }
 
-    CHECK(result->get_id() == td_api::sentWebAppMessage::ID);
-    auto message = move_object_as<td_api::sentWebAppMessage>(result);
+    CHECK(result->get_id() == td_api::inlineMessageId::ID);
+    auto message = move_object_as<td_api::inlineMessageId>(result);
     answer_query(JsonSentWebAppMessage(message.get()), std::move(query_));
   }
 
@@ -9408,7 +9436,10 @@ void Client::on_update(object_ptr<td_api::Object> result) {
     case td_api::updateNewChat::ID: {
       auto update = move_object_as<td_api::updateNewChat>(result);
       auto chat = std::move(update->chat_);
-      auto chat_info = add_chat(chat->id_);
+      auto chat_id = chat->id_;
+      bool is_pre_existing_chat = get_chat(chat_id) != nullptr;
+      auto chat_info = add_chat(chat_id);
+      bool is_new_channel = false;
       switch (chat->type_->get_id()) {
         case td_api::chatTypePrivate::ID: {
           auto type = move_object_as<td_api::chatTypePrivate>(chat->type_);
@@ -9429,6 +9460,7 @@ void Client::on_update(object_ptr<td_api::Object> result) {
           chat_info->type = ChatInfo::Type::Supergroup;
           auto supergroup_id = type->supergroup_id_;
           chat_info->supergroup_id = supergroup_id;
+          is_new_channel = type->is_channel_;
           break;
         }
         case td_api::chatTypeSecret::ID:
@@ -9436,6 +9468,15 @@ void Client::on_update(object_ptr<td_api::Object> result) {
           break;
         default:
           UNREACHABLE();
+      }
+
+      // Server never notifies user sessions about channel membership changes (chat_member/my_chat_member
+      // is a bot-only MTProto update), so synthesize a join event from the chat first appearing in this
+      // session. The startup grace period avoids false positives from TDLib lazily loading pre-existing
+      // chats right after (re)connecting.
+      if (is_user_ && is_new_channel && !is_pre_existing_chat && td::Time::now() - start_time_ > 30) {
+        auto webhook_queue_id = chat_id + (static_cast<int64>(13) << 33);
+        add_update(UpdateType::ChatJoined, JsonChatJoined(chat_id, this), 86400, webhook_queue_id);
       }
 
       chat_info->title = std::move(chat->title_);
@@ -9863,10 +9904,11 @@ td_api::object_ptr<td_api::InputMessageReplyTo> Client::get_input_message_reply_
     if (reply_parameters.reply_in_chat_id != 0) {
       return make_object<td_api::inputMessageReplyToExternalMessage>(
           reply_parameters.reply_in_chat_id, reply_parameters.reply_to_message_id, std::move(reply_parameters.quote),
-          reply_parameters.checklist_task_id);
+          reply_parameters.checklist_task_id, td::string());
     }
     return make_object<td_api::inputMessageReplyToMessage>(
-        reply_parameters.reply_to_message_id, std::move(reply_parameters.quote), reply_parameters.checklist_task_id);
+        reply_parameters.reply_to_message_id, std::move(reply_parameters.quote), reply_parameters.checklist_task_id,
+        td::string());
   }
   return nullptr;
 }
@@ -9875,7 +9917,8 @@ td_api::object_ptr<td_api::InputMessageReplyTo> Client::get_input_message_reply_
     InputReplyParameters &&reply_parameters) {
   if (reply_parameters.reply_in_chat_id.empty() && reply_parameters.reply_to_message_id > 0) {
     return make_object<td_api::inputMessageReplyToMessage>(
-        reply_parameters.reply_to_message_id, std::move(reply_parameters.quote), reply_parameters.checklist_task_id);
+        reply_parameters.reply_to_message_id, std::move(reply_parameters.quote), reply_parameters.checklist_task_id,
+        td::string());
   }
   return nullptr;
 }
@@ -10290,7 +10333,7 @@ td::Result<td_api::object_ptr<td_api::SuggestedPostPrice>> Client::get_suggested
     if (amount % 10000000 != 0) {
       return td::Status::Error(400, "Suggested post price must be divisible by 10000000 nanotoncoins");
     }
-    return make_object<td_api::suggestedPostPriceTon>(amount / 10000000);
+    return make_object<td_api::suggestedPostPriceGram>(amount / 10000000);
   }
   return td::Status::Error(400, "Invalid suggested post price currency specified");
 }
@@ -10608,7 +10651,11 @@ td::Result<td_api::object_ptr<td_api::InputMessageContent>> Client::get_input_me
           make_object<td_api::venue>(std::move(location), title, address, provider, venue_id, venue_type));
     }
 
-    return make_object<td_api::inputMessageLocation>(std::move(location), live_period, heading, proximity_alert_radius);
+    if (live_period != 0) {
+      return make_object<td_api::inputMessageLiveLocation>(
+          make_object<td_api::liveLocation>(std::move(location), live_period, heading, proximity_alert_radius));
+    }
+    return make_object<td_api::inputMessageLocation>(std::move(location));
   }
 
   if (object.has_field("phone_number")) {
@@ -10869,8 +10916,8 @@ td::Result<td_api::object_ptr<td_api::InputInlineQueryResult>> Client::get_inlin
     }
 
     if (input_message_content == nullptr) {
-      input_message_content = make_object<td_api::inputMessageAudio>(nullptr, nullptr, audio_duration, title, performer,
-                                                                     std::move(caption));
+      input_message_content = make_object<td_api::inputMessageAudio>(
+          make_object<td_api::inputAudio>(nullptr, nullptr, audio_duration, title, performer), std::move(caption));
     }
     return make_object<td_api::inputInlineQueryResultAudio>(id, title, performer, audio_url, audio_duration,
                                                             std::move(reply_markup), std::move(input_message_content));
@@ -10900,7 +10947,8 @@ td::Result<td_api::object_ptr<td_api::InputInlineQueryResult>> Client::get_inlin
     }
 
     if (input_message_content == nullptr) {
-      input_message_content = make_object<td_api::inputMessageDocument>(nullptr, nullptr, false, std::move(caption));
+      input_message_content = make_object<td_api::inputMessageDocument>(
+          make_object<td_api::inputDocument>(nullptr, nullptr, false), std::move(caption));
     }
     return make_object<td_api::inputInlineQueryResultDocument>(
         id, title, description, document_url, mime_type, thumbnail_url, thumbnail_width, thumbnail_height,
@@ -10926,9 +10974,10 @@ td::Result<td_api::object_ptr<td_api::InputInlineQueryResult>> Client::get_inlin
     }
 
     if (input_message_content == nullptr) {
-      input_message_content =
-          make_object<td_api::inputMessageAnimation>(nullptr, nullptr, td::vector<int32>(), gif_duration, gif_width,
-                                                     gif_height, std::move(caption), show_caption_above_media, false);
+      input_message_content = make_object<td_api::inputMessageAnimation>(
+          make_object<td_api::inputAnimation>(nullptr, nullptr, td::vector<int32>(), gif_duration, gif_width,
+                                              gif_height),
+          std::move(caption), show_caption_above_media, false);
     }
     return make_object<td_api::inputInlineQueryResultAnimation>(
         id, title, thumbnail_url, thumbnail_mime_type, gif_url, "image/gif", gif_duration, gif_width, gif_height,
@@ -10945,8 +10994,12 @@ td::Result<td_api::object_ptr<td_api::InputInlineQueryResult>> Client::get_inlin
 
     if (input_message_content == nullptr) {
       auto location = make_object<td_api::location>(latitude, longitude, horizontal_accuracy);
-      input_message_content =
-          make_object<td_api::inputMessageLocation>(std::move(location), live_period, heading, proximity_alert_radius);
+      if (live_period != 0) {
+        input_message_content = make_object<td_api::inputMessageLiveLocation>(
+            make_object<td_api::liveLocation>(std::move(location), live_period, heading, proximity_alert_radius));
+      } else {
+        input_message_content = make_object<td_api::inputMessageLocation>(std::move(location));
+      }
     }
     return make_object<td_api::inputInlineQueryResultLocation>(
         id, make_object<td_api::location>(latitude, longitude, horizontal_accuracy), live_period, title, thumbnail_url,
@@ -10968,9 +11021,10 @@ td::Result<td_api::object_ptr<td_api::InputInlineQueryResult>> Client::get_inlin
     }
 
     if (input_message_content == nullptr) {
-      input_message_content =
-          make_object<td_api::inputMessageAnimation>(nullptr, nullptr, td::vector<int32>(), mpeg4_duration, mpeg4_width,
-                                                     mpeg4_height, std::move(caption), show_caption_above_media, false);
+      input_message_content = make_object<td_api::inputMessageAnimation>(
+          make_object<td_api::inputAnimation>(nullptr, nullptr, td::vector<int32>(), mpeg4_duration, mpeg4_width,
+                                              mpeg4_height),
+          std::move(caption), show_caption_above_media, false);
     }
     return make_object<td_api::inputInlineQueryResultAnimation>(
         id, title, thumbnail_url, thumbnail_mime_type, mpeg4_url, "video/mp4", mpeg4_duration, mpeg4_width,
@@ -10988,7 +11042,8 @@ td::Result<td_api::object_ptr<td_api::InputInlineQueryResult>> Client::get_inlin
 
     if (input_message_content == nullptr) {
       input_message_content = make_object<td_api::inputMessagePhoto>(
-          nullptr, nullptr, td::vector<int32>(), 0, 0, std::move(caption), show_caption_above_media, nullptr, false);
+          make_object<td_api::inputPhoto>(nullptr, nullptr, nullptr, td::vector<int32>(), 0, 0), std::move(caption),
+          show_caption_above_media, nullptr, false);
     }
     return make_object<td_api::inputInlineQueryResultPhoto>(id, title, description, thumbnail_url, photo_url,
                                                             photo_width, photo_height, std::move(reply_markup),
@@ -10998,7 +11053,8 @@ td::Result<td_api::object_ptr<td_api::InputInlineQueryResult>> Client::get_inlin
     TRY_RESULT(sticker_file_id, object.get_required_string_field("sticker_file_id"));
 
     if (input_message_content == nullptr) {
-      input_message_content = make_object<td_api::inputMessageSticker>(nullptr, nullptr, 0, 0, td::string());
+      input_message_content = make_object<td_api::inputMessageSticker>(
+          make_object<td_api::inputSticker>(nullptr, nullptr, 0, 0), td::string());
     }
     return make_object<td_api::inputInlineQueryResultSticker>(id, "", sticker_file_id, 0, 0, std::move(reply_markup),
                                                               std::move(input_message_content));
@@ -11055,8 +11111,9 @@ td::Result<td_api::object_ptr<td_api::InputInlineQueryResult>> Client::get_inlin
 
     if (input_message_content == nullptr) {
       input_message_content = make_object<td_api::inputMessageVideo>(
-          nullptr, nullptr, nullptr, video_start_timestamp, td::vector<int32>(), video_duration, video_width,
-          video_height, false, std::move(caption), show_caption_above_media, nullptr, false);
+          make_object<td_api::inputVideo>(nullptr, nullptr, nullptr, video_start_timestamp, td::vector<int32>(),
+                                          video_duration, video_width, video_height, false),
+          std::move(caption), show_caption_above_media, nullptr, false);
     }
     return make_object<td_api::inputInlineQueryResultVideo>(id, title, description, thumbnail_url, video_url, mime_type,
                                                             video_width, video_height, video_duration,
@@ -11072,7 +11129,8 @@ td::Result<td_api::object_ptr<td_api::InputInlineQueryResult>> Client::get_inlin
 
     if (input_message_content == nullptr) {
       input_message_content = make_object<td_api::inputMessageVoiceNote>(
-          nullptr, voice_note_duration, "" /* waveform */, std::move(caption), nullptr);
+          make_object<td_api::inputVoiceNote>(nullptr, voice_note_duration, "" /* waveform */), std::move(caption),
+          nullptr);
     }
     return make_object<td_api::inputInlineQueryResultVoiceNote>(
         id, title, voice_note_url, voice_note_duration, std::move(reply_markup), std::move(input_message_content));
@@ -11154,7 +11212,7 @@ td::Result<td_api::object_ptr<td_api::botCommand>> Client::get_bot_command(td::J
   TRY_RESULT(command, object.get_required_string_field("command"));
   TRY_RESULT(description, object.get_required_string_field("description"));
 
-  return make_object<td_api::botCommand>(command, description);
+  return make_object<td_api::botCommand>(command, description, false);
 }
 
 td::Result<td::vector<td_api::object_ptr<td_api::botCommand>>> Client::get_bot_commands(const Query *query) {
@@ -11421,7 +11479,7 @@ td::Result<td_api::object_ptr<td_api::StickerFormat>> Client::get_sticker_format
   return td::Status::Error(400, "Invalid sticker format specified");
 }
 
-td::Result<td_api::object_ptr<td_api::inputSticker>> Client::get_input_sticker(const Query *query,
+td::Result<td_api::object_ptr<td_api::newSticker>> Client::get_input_sticker(const Query *query,
                                                                                td::JsonValue &&value,
                                                                                td::Slice default_sticker_format) const {
   if (value.type() != td::JsonValue::Type::Object) {
@@ -11458,11 +11516,11 @@ td::Result<td_api::object_ptr<td_api::inputSticker>> Client::get_input_sticker(c
       input_keywords.push_back(keyword.get_string().str());
     }
   }
-  return make_object<td_api::inputSticker>(std::move(input_file), std::move(sticker_format), emojis,
+  return make_object<td_api::newSticker>(std::move(input_file), std::move(sticker_format), emojis,
                                            std::move(mask_position), std::move(input_keywords));
 }
 
-td::Result<td_api::object_ptr<td_api::inputSticker>> Client::get_input_sticker(const Query *query) const {
+td::Result<td_api::object_ptr<td_api::newSticker>> Client::get_input_sticker(const Query *query) const {
   if (query->has_arg("sticker") || query->file("sticker") != nullptr) {
     auto sticker = query->arg("sticker");
     LOG(INFO) << "Parsing JSON object: " << sticker;
@@ -11482,7 +11540,7 @@ td::Result<td_api::object_ptr<td_api::inputSticker>> Client::get_input_sticker(c
   return get_legacy_input_sticker(query);
 }
 
-td::Result<td_api::object_ptr<td_api::inputSticker>> Client::get_legacy_input_sticker(const Query *query) const {
+td::Result<td_api::object_ptr<td_api::newSticker>> Client::get_legacy_input_sticker(const Query *query) const {
   auto emojis = query->arg("emojis");
   auto sticker = get_input_file(query, "png_sticker");
   object_ptr<td_api::StickerFormat> sticker_format;
@@ -11510,11 +11568,11 @@ td::Result<td_api::object_ptr<td_api::inputSticker>> Client::get_legacy_input_st
     }
   }
 
-  return make_object<td_api::inputSticker>(std::move(sticker), std::move(sticker_format), emojis.str(),
+  return make_object<td_api::newSticker>(std::move(sticker), std::move(sticker_format), emojis.str(),
                                            std::move(mask_position), td::vector<td::string>());
 }
 
-td::Result<td::vector<td_api::object_ptr<td_api::inputSticker>>> Client::get_input_stickers(const Query *query) const {
+td::Result<td::vector<td_api::object_ptr<td_api::newSticker>>> Client::get_input_stickers(const Query *query) const {
   if (query->has_arg("stickers")) {
     auto sticker_format_str = query->arg("sticker_format");
     auto stickers = query->arg("stickers");
@@ -11535,7 +11593,7 @@ td::Result<td::vector<td_api::object_ptr<td_api::inputSticker>>> Client::get_inp
       return td::Status::Error(400, "Too many stickers specified");
     }
 
-    td::vector<object_ptr<td_api::inputSticker>> input_stickers;
+    td::vector<object_ptr<td_api::newSticker>> input_stickers;
     for (auto &input_sticker : value.get_array()) {
       auto r_input_sticker = get_input_sticker(query, std::move(input_sticker), sticker_format_str);
       if (r_input_sticker.is_error()) {
@@ -11548,7 +11606,7 @@ td::Result<td::vector<td_api::object_ptr<td_api::inputSticker>>> Client::get_inp
 
   TRY_RESULT(input_sticker, get_legacy_input_sticker(query));
 
-  td::vector<object_ptr<td_api::inputSticker>> stickers;
+  td::vector<object_ptr<td_api::newSticker>> stickers;
   stickers.push_back(std::move(input_sticker));
   return std::move(stickers);
 }
@@ -12056,7 +12114,7 @@ td::Result<td_api::object_ptr<td_api::chatPermissions>> Client::get_chat_permiss
 
   return make_object<td_api::chatPermissions>(
       can_send_messages, can_send_audios, can_send_documents, can_send_photos, can_send_videos, can_send_video_notes,
-      can_send_voice_notes, can_send_polls, can_send_other_messages, can_add_link_previews, can_edit_tag,
+      can_send_voice_notes, can_send_polls, can_send_other_messages, can_add_link_previews, false, can_edit_tag,
       can_change_info, can_invite_users, can_pin_messages, can_manage_topics);
 }
 
@@ -12171,8 +12229,9 @@ td::Result<td_api::object_ptr<td_api::InputMessageContent>> Client::get_input_me
 
   TRY_RESULT(type, object.get_required_string_field("type"));
   if (type == "photo") {
-    return make_object<td_api::inputMessagePhoto>(std::move(input_file), nullptr, td::vector<int32>(), 0, 0,
-                                                  std::move(caption), show_caption_above_media, nullptr, has_spoiler);
+    return make_object<td_api::inputMessagePhoto>(
+        make_object<td_api::inputPhoto>(std::move(input_file), nullptr, nullptr, td::vector<int32>(), 0, 0),
+        std::move(caption), show_caption_above_media, nullptr, has_spoiler);
   }
   if (type == "video") {
     TRY_RESULT(width, object.get_optional_int_field("width"));
@@ -12187,10 +12246,11 @@ td::Result<td_api::object_ptr<td_api::InputMessageContent>> Client::get_input_me
     duration = td::clamp(duration, 0, MAX_DURATION);
     start_timestamp = td::clamp(start_timestamp, 0, MAX_DURATION);
 
-    return make_object<td_api::inputMessageVideo>(std::move(input_file), std::move(input_thumbnail),
-                                                  std::move(input_cover), start_timestamp, td::vector<int32>(),
-                                                  duration, width, height, supports_streaming, std::move(caption),
-                                                  show_caption_above_media, nullptr, has_spoiler);
+    return make_object<td_api::inputMessageVideo>(
+        make_object<td_api::inputVideo>(std::move(input_file), std::move(input_thumbnail), std::move(input_cover),
+                                        start_timestamp, td::vector<int32>(), duration, width, height,
+                                        supports_streaming),
+        std::move(caption), show_caption_above_media, nullptr, has_spoiler);
   }
   if (type == "animation") {
     if (for_album) {
@@ -12202,22 +12262,27 @@ td::Result<td_api::object_ptr<td_api::InputMessageContent>> Client::get_input_me
     width = td::clamp(width, 0, MAX_LENGTH);
     height = td::clamp(height, 0, MAX_LENGTH);
     duration = td::clamp(duration, 0, MAX_DURATION);
-    return make_object<td_api::inputMessageAnimation>(std::move(input_file), std::move(input_thumbnail),
-                                                      td::vector<int32>(), duration, width, height, std::move(caption),
-                                                      show_caption_above_media, has_spoiler);
+    return make_object<td_api::inputMessageAnimation>(
+        make_object<td_api::inputAnimation>(std::move(input_file), std::move(input_thumbnail), td::vector<int32>(),
+                                            duration, width, height),
+        std::move(caption), show_caption_above_media, has_spoiler);
   }
   if (type == "audio") {
     TRY_RESULT(duration, object.get_optional_int_field("duration"));
     TRY_RESULT(title, object.get_optional_string_field("title"));
     TRY_RESULT(performer, object.get_optional_string_field("performer"));
     duration = td::clamp(duration, 0, MAX_DURATION);
-    return make_object<td_api::inputMessageAudio>(std::move(input_file), std::move(input_thumbnail), duration, title,
-                                                  performer, std::move(caption));
+    return make_object<td_api::inputMessageAudio>(
+        make_object<td_api::inputAudio>(std::move(input_file), std::move(input_thumbnail), duration, title,
+                                        performer),
+        std::move(caption));
   }
   if (type == "document") {
     TRY_RESULT(disable_content_type_detection, object.get_optional_bool_field("disable_content_type_detection"));
-    return make_object<td_api::inputMessageDocument>(std::move(input_file), std::move(input_thumbnail),
-                                                     disable_content_type_detection || for_album, std::move(caption));
+    return make_object<td_api::inputMessageDocument>(
+        make_object<td_api::inputDocument>(std::move(input_file), std::move(input_thumbnail),
+                                           disable_content_type_detection || for_album),
+        std::move(caption));
   }
 
   return td::Status::Error(PSLICE() << "type \"" << type << "\" is unsupported");
@@ -13403,9 +13468,10 @@ td::Status Client::process_send_animation_query(PromisedQueryPtr &query) {
   TRY_RESULT(caption, get_caption(query.get()));
   auto show_caption_above_media = to_bool(query->arg("show_caption_above_media"));
   auto has_spoiler = to_bool(query->arg("has_spoiler"));
-  do_send_message(make_object<td_api::inputMessageAnimation>(std::move(animation), std::move(thumbnail),
-                                                             td::vector<int32>(), duration, width, height,
-                                                             std::move(caption), show_caption_above_media, has_spoiler),
+  do_send_message(make_object<td_api::inputMessageAnimation>(
+                      make_object<td_api::inputAnimation>(std::move(animation), std::move(thumbnail),
+                                                          td::vector<int32>(), duration, width, height),
+                      std::move(caption), show_caption_above_media, has_spoiler),
                   std::move(query));
   return td::Status::OK();
 }
@@ -13420,8 +13486,10 @@ td::Status Client::process_send_audio_query(PromisedQueryPtr &query) {
   auto title = query->arg("title").str();
   auto performer = query->arg("performer").str();
   TRY_RESULT(caption, get_caption(query.get()));
-  do_send_message(make_object<td_api::inputMessageAudio>(std::move(audio), std::move(thumbnail), duration, title,
-                                                         performer, std::move(caption)),
+  do_send_message(make_object<td_api::inputMessageAudio>(
+                      make_object<td_api::inputAudio>(std::move(audio), std::move(thumbnail), duration, title,
+                                                      performer),
+                      std::move(caption)),
                   std::move(query));
   return td::Status::OK();
 }
@@ -13440,8 +13508,10 @@ td::Status Client::process_send_document_query(PromisedQueryPtr &query) {
   auto thumbnail = get_input_thumbnail(query.get());
   TRY_RESULT(caption, get_caption(query.get()));
   bool disable_content_type_detection = to_bool(query->arg("disable_content_type_detection"));
-  do_send_message(make_object<td_api::inputMessageDocument>(std::move(document), std::move(thumbnail),
-                                                            disable_content_type_detection, std::move(caption)),
+  do_send_message(make_object<td_api::inputMessageDocument>(
+                      make_object<td_api::inputDocument>(std::move(document), std::move(thumbnail),
+                                                         disable_content_type_detection),
+                      std::move(caption)),
                   std::move(query));
   return td::Status::OK();
 }
@@ -13455,8 +13525,9 @@ td::Status Client::process_send_photo_query(PromisedQueryPtr &query) {
   auto show_caption_above_media = to_bool(query->arg("show_caption_above_media"));
   auto has_spoiler = to_bool(query->arg("has_spoiler"));
   do_send_message(
-      make_object<td_api::inputMessagePhoto>(std::move(photo), nullptr, td::vector<int32>(), 0, 0, std::move(caption),
-                                             show_caption_above_media, nullptr, has_spoiler),
+      make_object<td_api::inputMessagePhoto>(
+          make_object<td_api::inputPhoto>(std::move(photo), nullptr, nullptr, td::vector<int32>(), 0, 0),
+          std::move(caption), show_caption_above_media, nullptr, has_spoiler),
       std::move(query));
   return td::Status::OK();
 }
@@ -13467,7 +13538,8 @@ td::Status Client::process_send_sticker_query(PromisedQueryPtr &query) {
     return td::Status::Error(400, "There is no sticker in the request");
   }
   auto emoji = query->arg("emoji");
-  do_send_message(make_object<td_api::inputMessageSticker>(std::move(sticker), nullptr, 0, 0, emoji.str()),
+  do_send_message(make_object<td_api::inputMessageSticker>(
+                      make_object<td_api::inputSticker>(std::move(sticker), nullptr, 0, 0), emoji.str()),
                   std::move(query));
   return td::Status::OK();
 }
@@ -13488,9 +13560,10 @@ td::Status Client::process_send_video_query(PromisedQueryPtr &query) {
   auto show_caption_above_media = to_bool(query->arg("show_caption_above_media"));
   auto has_spoiler = to_bool(query->arg("has_spoiler"));
   do_send_message(
-      make_object<td_api::inputMessageVideo>(std::move(video), std::move(thumbnail), std::move(cover), start_timestamp,
-                                             td::vector<int32>(), duration, width, height, supports_streaming,
-                                             std::move(caption), show_caption_above_media, nullptr, has_spoiler),
+      make_object<td_api::inputMessageVideo>(
+          make_object<td_api::inputVideo>(std::move(video), std::move(thumbnail), std::move(cover), start_timestamp,
+                                          td::vector<int32>(), duration, width, height, supports_streaming),
+          std::move(caption), show_caption_above_media, nullptr, has_spoiler),
       std::move(query));
   return td::Status::OK();
 }
@@ -13503,8 +13576,10 @@ td::Status Client::process_send_video_note_query(PromisedQueryPtr &query) {
   auto thumbnail = get_input_thumbnail(query.get());
   int32 duration = get_integer_arg(query.get(), "duration", 0, 0, MAX_DURATION);
   int32 length = get_integer_arg(query.get(), "length", 0, 0, MAX_LENGTH);
-  do_send_message(make_object<td_api::inputMessageVideoNote>(std::move(video_note), std::move(thumbnail), duration,
-                                                             length, nullptr),
+  do_send_message(make_object<td_api::inputMessageVideoNote>(
+                      make_object<td_api::inputVideoNote>(std::move(video_note), std::move(thumbnail), duration,
+                                                          length),
+                      nullptr),
                   std::move(query));
   return td::Status::OK();
 }
@@ -13517,7 +13592,8 @@ td::Status Client::process_send_voice_query(PromisedQueryPtr &query) {
   int32 duration = get_integer_arg(query.get(), "duration", 0, 0, MAX_DURATION);
   TRY_RESULT(caption, get_caption(query.get()));
   do_send_message(
-      make_object<td_api::inputMessageVoiceNote>(std::move(voice_note), duration, "", std::move(caption), nullptr),
+      make_object<td_api::inputMessageVoiceNote>(
+          make_object<td_api::inputVoiceNote>(std::move(voice_note), duration, ""), std::move(caption), nullptr),
       std::move(query));
   return td::Status::OK();
 }
@@ -13554,9 +13630,14 @@ td::Status Client::process_send_location_query(PromisedQueryPtr &query) {
   int32 heading = get_integer_arg(query.get(), "heading", 0);
   int32 proximity_alert_radius = get_integer_arg(query.get(), "proximity_alert_radius", 0);
 
-  do_send_message(
-      make_object<td_api::inputMessageLocation>(std::move(location), live_period, heading, proximity_alert_radius),
-      std::move(query));
+  if (live_period != 0) {
+    do_send_message(make_object<td_api::inputMessageLiveLocation>(
+                        make_object<td_api::liveLocation>(std::move(location), live_period, heading,
+                                                          proximity_alert_radius)),
+                    std::move(query));
+  } else {
+    do_send_message(make_object<td_api::inputMessageLocation>(std::move(location)), std::move(query));
+  }
   return td::Status::OK();
 }
 
@@ -13604,31 +13685,44 @@ td::Status Client::process_send_contact_query(PromisedQueryPtr &query) {
 td::Status Client::process_send_poll_query(PromisedQueryPtr &query) {
   TRY_RESULT(question, get_formatted_text(query->arg("question").str(), query->arg("question_parse_mode").str(),
                                           get_input_entities(query.get(), "question_entities")));
-  TRY_RESULT(options, get_poll_options(query.get()));
+  TRY_RESULT(option_texts, get_poll_options(query.get()));
+  td::vector<object_ptr<td_api::inputPollOption>> options;
+  for (auto &option_text : option_texts) {
+    options.push_back(make_object<td_api::inputPollOption>(std::move(option_text), nullptr));
+  }
   bool is_anonymous = true;
   if (query->has_arg("is_anonymous")) {
     is_anonymous = to_bool(query->arg("is_anonymous"));
   }
 
-  object_ptr<td_api::PollType> poll_type;
+  object_ptr<td_api::InputPollType> poll_type;
+  bool allows_multiple_answers = false;
   auto type = query->arg("type");
   if (type == "quiz") {
     TRY_RESULT(explanation,
                get_formatted_text(query->arg("explanation").str(), query->arg("explanation_parse_mode").str(),
                                   get_input_entities(query.get(), "explanation_entities")));
 
-    poll_type = make_object<td_api::pollTypeQuiz>(get_integer_arg(query.get(), "correct_option_id", -1),
-                                                  std::move(explanation));
+    td::vector<int32> correct_option_ids;
+    auto correct_option_id = get_integer_arg(query.get(), "correct_option_id", -1);
+    if (correct_option_id >= 0) {
+      correct_option_ids.push_back(correct_option_id);
+    }
+    poll_type = make_object<td_api::inputPollTypeQuiz>(std::move(correct_option_ids), std::move(explanation), nullptr);
   } else if (type.empty() || type == "regular") {
-    poll_type = make_object<td_api::pollTypeRegular>(to_bool(query->arg("allows_multiple_answers")));
+    allows_multiple_answers = to_bool(query->arg("allows_multiple_answers"));
+    poll_type = make_object<td_api::inputPollTypeRegular>(false);
   } else {
     return td::Status::Error(400, "Unsupported poll type specified");
   }
   int32 open_period = get_integer_arg(query.get(), "open_period", 0, 0, 10 * 60);
   int32 close_date = get_integer_arg(query.get(), "close_date", 0);
   auto is_closed = to_bool(query->arg("is_closed"));
-  do_send_message(make_object<td_api::inputMessagePoll>(std::move(question), std::move(options), is_anonymous,
-                                                        std::move(poll_type), open_period, close_date, is_closed),
+  do_send_message(make_object<td_api::inputMessagePoll>(
+                      std::move(question), std::move(options),
+                      make_object<td_api::formattedText>(td::string(), td::vector<object_ptr<td_api::textEntity>>()),
+                      nullptr, is_anonymous, allows_multiple_answers, false, false, td::vector<td::string>(), false,
+                      false, std::move(poll_type), open_period, close_date, is_closed),
                   std::move(query));
   return td::Status::OK();
 }
@@ -14003,6 +14097,10 @@ td::Status Client::process_edit_message_live_location_query(PromisedQueryPtr &qu
   if (query->method() == "editmessagelivelocation") {
     TRY_RESULT_ASSIGN(location, get_location(query.get()));
   }
+  object_ptr<td_api::liveLocation> live_location =
+      location == nullptr ? nullptr
+                          : make_object<td_api::liveLocation>(std::move(location), live_period, heading,
+                                                               proximity_alert_radius);
   auto business_connection_id = query->arg("business_connection_id");
   auto chat_id = query->arg("chat_id");
   auto message_id = get_message_id(query.get());
@@ -14013,40 +14111,39 @@ td::Status Client::process_edit_message_live_location_query(PromisedQueryPtr &qu
     TRY_RESULT(inline_message_id, get_inline_message_id(query.get()));
     resolve_reply_markup_bot_usernames(
         std::move(reply_markup), std::move(query),
-        [this, inline_message_id = inline_message_id.str(), location = std::move(location), live_period, heading,
-         proximity_alert_radius](object_ptr<td_api::ReplyMarkup> reply_markup, PromisedQueryPtr query) mutable {
-          send_request(make_object<td_api::editInlineMessageLiveLocation>(inline_message_id, std::move(reply_markup),
-                                                                          std::move(location), live_period, heading,
-                                                                          proximity_alert_radius),
+        [this, inline_message_id = inline_message_id.str(),
+         live_location = std::move(live_location)](object_ptr<td_api::ReplyMarkup> reply_markup,
+                                                    PromisedQueryPtr query) mutable {
+          send_request(make_object<td_api::editInlineMessageLiveLocation>(
+                           inline_message_id, std::move(reply_markup), std::move(live_location)),
                        td::make_unique<TdOnEditInlineMessageCallback>(std::move(query)));
         });
   } else {
     resolve_reply_markup_bot_usernames(
         std::move(reply_markup), std::move(query),
         [this, business_connection_id = business_connection_id.str(), chat_id_str = chat_id.str(), message_id,
-         location = std::move(location), live_period, heading,
-         proximity_alert_radius](object_ptr<td_api::ReplyMarkup> reply_markup, PromisedQueryPtr query) mutable {
+         live_location = std::move(live_location)](object_ptr<td_api::ReplyMarkup> reply_markup,
+                                                    PromisedQueryPtr query) mutable {
           if (!business_connection_id.empty()) {
             return check_business_connection_chat_id(
                 business_connection_id, chat_id_str, std::move(query),
-                [this, message_id, location = std::move(location), live_period, heading, proximity_alert_radius,
+                [this, message_id, live_location = std::move(live_location),
                  reply_markup = std::move(reply_markup)](const BusinessConnection *business_connection, int64 chat_id,
                                                          PromisedQueryPtr query) mutable {
                   send_request(make_object<td_api::editBusinessMessageLiveLocation>(
                                    business_connection->id_, chat_id, message_id, std::move(reply_markup),
-                                   std::move(location), live_period, heading, proximity_alert_radius),
+                                   std::move(live_location)),
                                td::make_unique<TdOnReturnBusinessMessageCallback>(this, business_connection->id_,
                                                                                   std::move(query)));
                 });
           }
 
           check_message(chat_id_str, message_id, false, AccessRights::Edit, "message to edit", std::move(query),
-                        [this, location = std::move(location), live_period, heading, proximity_alert_radius,
+                        [this, live_location = std::move(live_location),
                          reply_markup = std::move(reply_markup)](int64 chat_id, int64 message_id,
                                                                  PromisedQueryPtr query) mutable {
                           send_request(make_object<td_api::editMessageLiveLocation>(
-                                           chat_id, message_id, std::move(reply_markup), std::move(location),
-                                           live_period, heading, proximity_alert_radius),
+                                           chat_id, message_id, std::move(reply_markup), std::move(live_location)),
                                        td::make_unique<TdOnEditMessageCallback>(this, std::move(query)));
                         });
         });
@@ -16244,7 +16341,7 @@ td::Status Client::process_add_proxy_query(PromisedQueryPtr &query) {
 
   td_api::object_ptr<td_api::proxy> proxy = make_object<td_api::proxy>(server.str(), port, std::move(type));
 
-  send_request(make_object<td_api::addProxy>(std::move(proxy), false),
+  send_request(make_object<td_api::addProxy>(std::move(proxy), false, td::string()),
                td::make_unique<TdOnAddProxyQueryCallback>(std::move(query)));
   return td::Status::OK();
 }
@@ -16353,7 +16450,7 @@ td::Status Client::process_search_public_chats_query(PromisedQueryPtr &query) {
   CHECK_IS_USER();
   auto query_ = query->arg("query");
 
-  send_request(make_object<td_api::searchPublicChats>(query_.str()),
+  send_request(make_object<td_api::searchPublicChats>(query_.str(), nullptr),
                td::make_unique<TdOnGetChatsCallback>(this, std::move(query)));
   return td::Status::OK();
 }
@@ -17691,6 +17788,8 @@ td::Slice Client::get_update_type_name(UpdateType update_type) {
       return td::Slice("purchased_paid_media");
     case UpdateType::DeletedMessages:
       return td::Slice("deleted_messages");
+    case UpdateType::ChatJoined:
+      return td::Slice("chat_joined");
     default:
       UNREACHABLE();
       return td::Slice();
@@ -18437,9 +18536,9 @@ bool Client::are_equal_suggested_post_prices(const td_api::SuggestedPostPrice *l
     case td_api::suggestedPostPriceStar::ID:
       return static_cast<const td_api::suggestedPostPriceStar *>(lhs)->star_count_ ==
              static_cast<const td_api::suggestedPostPriceStar *>(rhs)->star_count_;
-    case td_api::suggestedPostPriceTon::ID:
-      return static_cast<const td_api::suggestedPostPriceTon *>(lhs)->toncoin_cent_count_ ==
-             static_cast<const td_api::suggestedPostPriceTon *>(rhs)->toncoin_cent_count_;
+    case td_api::suggestedPostPriceGram::ID:
+      return static_cast<const td_api::suggestedPostPriceGram *>(lhs)->gram_cent_count_ ==
+             static_cast<const td_api::suggestedPostPriceGram *>(rhs)->gram_cent_count_;
     default:
       UNREACHABLE();
       return false;
@@ -18865,7 +18964,7 @@ void Client::init_message(MessageInfo *message_info, object_ptr<td_api::message>
   message_info->sender_tag = std::move(message->sender_tag_);
   message_info->paid_message_star_count = message->paid_message_star_count_;
   message_info->effect_id = message->effect_id_;
-  message_info->is_paid_post = message->is_paid_star_suggested_post_ || message->is_paid_ton_suggested_post_;
+  message_info->is_paid_post = message->is_paid_star_suggested_post_ || message->is_paid_gram_suggested_post_;
 
   drop_internal_reply_to_message_in_another_chat(message);
 
@@ -18924,6 +19023,13 @@ void Client::update_message_content(int64 chat_id, int64 message_id, object_ptr<
 
   message_info->content = std::move(content);
   message_info->is_content_changed = true;
+
+  // User sessions never receive td_api::updatePoll (TDLib sends it only to bots); poll changes
+  // arrive here instead as a message content update. Synthesize the "poll" webhook update from it.
+  if (is_user_ && message_info->content->get_id() == td_api::messagePoll::ID) {
+    auto poll = static_cast<const td_api::messagePoll *>(message_info->content.get())->poll_.get();
+    add_update(UpdateType::Poll, JsonPoll(poll, this), 86400, poll->id_);
+  }
 }
 
 void Client::on_update_message_suggested_post_info(int64 chat_id, int64 message_id,

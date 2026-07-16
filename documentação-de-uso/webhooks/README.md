@@ -75,6 +75,26 @@ Cada `message` tem **um** campo de conteúdo (`text`, `voice`, `sticker`, `photo
 
 `thumbnail` e `thumb` sempre vêm duplicados com o mesmo conteúdo (campo legado mantido por compatibilidade) — pode usar qualquer um dos dois.
 
+## Entidades de texto (`entities`)
+
+Formatação/marcações dentro de `text` (ou `caption`). Array de objetos, cada um cobrindo um trecho por `offset`/`length` (em UTF-16 code units):
+
+| Campo | Tipo | Descrição |
+|---|---|---|
+| `offset` | Integer | Posição inicial do trecho no texto |
+| `length` | Integer | Tamanho do trecho |
+| `type` | String | Tipo da entidade — visto até agora: `text_mention` (menção a usuário sem `@username`, clicável pelo nome) |
+| `user` | User | Só em `text_mention` — o usuário mencionado (objeto `User` completo) |
+
+```json
+{
+  "text": "Alex Sm",
+  "entities": [
+    { "offset": 0, "length": 7, "type": "text_mention", "user": { "id": 8989074661, "first_name": "SM CLICK", "is_premium": true, "user_status": "offline", "last_seen": 1784144315 } }
+  ]
+}
+```
+
 ## Citações (`reply_to_message` e `quote`)
 
 Quando uma mensagem responde outra, ganha o campo `reply_to_message`: uma cópia da mensagem original (mesma estrutura de `message`).

@@ -1023,5 +1023,157 @@
             "type": "regular",
             "allows_multiple_answers": true
         }
+    },
+    // type citation of contact in groups
+    {
+        "update_id": 993143538,
+        "message": {
+            "message_id": 127,
+            "from": {
+                "id": 5425710484,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "user_status": "online"
+            },
+            "chat": {
+                "id": -5433689565,
+                "title": "Teste do -",
+                "type": "group",
+                "all_members_are_administrators": false,
+                "accepted_gift_types": {
+                    "unlimited_gifts": false,
+                    "limited_gifts": false,
+                    "unique_gifts": false,
+                    "premium_subscription": false,
+                    "gifts_from_channels": false
+                }
+            },
+            "date": 1784144688,
+            "is_outgoing": false,
+            "text": "Alex Sm",
+            "entities": [
+                {
+                    "offset": 0,
+                    "length": 7,
+                    "type": "text_mention",
+                    "user": {
+                        "id": 8989074661,
+                        "is_bot": false,
+                        "is_deleted": false,
+                        "first_name": "SM CLICK",
+                        "is_premium": true,
+                        "user_status": "offline",
+                        "last_seen": 1784144315
+                    }
+                }
+            ]
+        }
+    },
+    // type add member in group
+    {
+        "update_id": 993143548,
+        "message": {
+            "message_id": 140,
+            "from": {
+                "id": 5425710484,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "user_status": "online"
+            },
+            "chat": {
+                "id": -5558416090,
+                "title": "Teste criação",
+                "type": "group",
+                "all_members_are_administrators": false,
+                "accepted_gift_types": {
+                    "unlimited_gifts": false,
+                    "limited_gifts": false,
+                    "unique_gifts": false,
+                    "premium_subscription": false,
+                    "gifts_from_channels": false
+                }
+            },
+            "date": 1784235732,
+            "is_outgoing": false,
+            "new_chat_participant": {
+                "id": 8989074661,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "SM CLICK",
+                "is_premium": true,
+                "user_status": "online"
+            },
+            "new_chat_member": {
+                "id": 8989074661,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "SM CLICK",
+                "is_premium": true,
+                "user_status": "online"
+            },
+            "new_chat_members": [
+                {
+                    "id": 8989074661,
+                    "is_bot": false,
+                    "is_deleted": false,
+                    "first_name": "SM CLICK",
+                    "is_premium": true,
+                    "user_status": "online"
+                }
+            ]
+        }
+    },
+    // type remove member in group
+    {
+        "update_id": 993143549,
+        "message": {
+            "message_id": 141,
+            "from": {
+                "id": 5425710484,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "user_status": "online"
+            },
+            "chat": {
+                "id": -5558416090,
+                "title": "Teste criação",
+                "type": "group",
+                "all_members_are_administrators": false,
+                "accepted_gift_types": {
+                    "unlimited_gifts": false,
+                    "limited_gifts": false,
+                    "unique_gifts": false,
+                    "premium_subscription": false,
+                    "gifts_from_channels": false
+                }
+            },
+            "date": 1784235780,
+            "is_outgoing": false,
+            "left_chat_participant": {
+                "id": 8989074661,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "SM CLICK",
+                "is_premium": true,
+                "user_status": "online"
+            },
+            "left_chat_member": {
+                "id": 8989074661,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "SM CLICK",
+                "is_premium": true,
+                "user_status": "online"
+            }
+        }
     }
 ]
