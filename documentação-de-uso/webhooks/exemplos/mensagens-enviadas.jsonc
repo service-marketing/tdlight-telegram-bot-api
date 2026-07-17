@@ -1,0 +1,899 @@
+[
+    // mensagem recebida por tipo
+    // Type text
+    {
+        "update_id": 993143433,
+        "message": {
+            "message_id": 24,
+            "from": {
+                "id": 8989074661,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "SM CLICK",
+                "is_premium": true,
+                "user_status": "online"
+            },
+            "chat": {
+                "id": 5425710484,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "type": "private",
+                "user_status": "offline",
+                "last_seen": 1783954425
+            },
+            "date": 1783955050,
+            "is_outgoing": true,
+            "text": "Textooo"
+        }
+    },
+    // type audio
+    {
+        "update_id": 993143435,
+        "message": {
+            "message_id": 26,
+            "from": {
+                "id": 8989074661,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "SM CLICK",
+                "is_premium": true,
+                "user_status": "online"
+            },
+            "chat": {
+                "id": 5425710484,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "type": "private",
+                "user_status": "offline",
+                "last_seen": 1783954425
+            },
+            "date": 1783955100,
+            "is_outgoing": true,
+            "voice": {
+                "duration": 1,
+                "mime_type": "audio/ogg",
+                "file_id": "AwACAgEAAxkDAAMaalT-nGR5Gcxdxw89VhSaLDVzVG8AAjwHAAJEwqhGiEBVZU3nPn86BA",
+                "file_unique_id": "AgADPAcAAkTCqEY",
+                "file_size": 6544
+            }
+        }
+    },
+    // type sticker
+    {
+        "update_id": 993143434,
+        "message": {
+            "message_id": 25,
+            "from": {
+                "id": 8989074661,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "SM CLICK",
+                "is_premium": true,
+                "user_status": "online"
+            },
+            "chat": {
+                "id": 5425710484,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "type": "private",
+                "user_status": "offline",
+                "last_seen": 1783954425
+            },
+            "date": 1783955089,
+            "is_outgoing": true,
+            "sticker": {
+                "width": 512,
+                "height": 512,
+                "emoji": "😘",
+                "set_name": "BananaFun",
+                "is_animated": true,
+                "is_video": false,
+                "type": "regular",
+                "thumbnail": {
+                    "file_id": "AAMCAgADGQMAAxlqVP6R05BX46oVdLBTd2zaxuEc2wAC5wIAArVx2gZIrx2wn98X5gEAB20AAzoE",
+                    "file_unique_id": "AQAD5wIAArVx2gZy",
+                    "file_size": 5118,
+                    "width": 128,
+                    "height": 128
+                },
+                "thumb": {
+                    "file_id": "AAMCAgADGQMAAxlqVP6R05BX46oVdLBTd2zaxuEc2wAC5wIAArVx2gZIrx2wn98X5gEAB20AAzoE",
+                    "file_unique_id": "AQAD5wIAArVx2gZy",
+                    "file_size": 5118,
+                    "width": 128,
+                    "height": 128
+                },
+                "file_id": "CAACAgIAAxkDAAMZalT-kdOQV-OqFXSwU3ds2sbhHNsAAucCAAK1cdoGSK8dsJ_fF-Y6BA",
+                "file_unique_id": "AgAD5wIAArVx2gY",
+                "file_size": 10353
+            }
+        }
+    },
+    // type image
+    {
+        "update_id": 993143436,
+        "message": {
+            "message_id": 27,
+            "from": {
+                "id": 8989074661,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "SM CLICK",
+                "is_premium": true,
+                "user_status": "online"
+            },
+            "chat": {
+                "id": 5425710484,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "type": "private",
+                "user_status": "offline",
+                "last_seen": 1783954425
+            },
+            "date": 1783955291,
+            "is_outgoing": true,
+            "photo": [
+                {
+                    "file_id": "AgACAgEAAxkDAAMbalT_WxvB0BVN4TyKxvw1fP-zY5MAAhENaxtEwqhG9ftgO456ZBkBAAMCAANtAAM6BA",
+                    "file_unique_id": "AQADEQ1rG0TCqEZy",
+                    "file_size": 15655,
+                    "width": 180,
+                    "height": 320
+                },
+                {
+                    "file_id": "AgACAgEAAxkDAAMbalT_WxvB0BVN4TyKxvw1fP-zY5MAAhENaxtEwqhG9ftgO456ZBkBAAMCAAN4AAM6BA",
+                    "file_unique_id": "AQADEQ1rG0TCqEZ9",
+                    "file_size": 58899,
+                    "width": 450,
+                    "height": 800
+                },
+                {
+                    "file_id": "AgACAgEAAxkDAAMbalT_WxvB0BVN4TyKxvw1fP-zY5MAAhENaxtEwqhG9ftgO456ZBkBAAMCAAN5AAM6BA",
+                    "file_unique_id": "AQADEQ1rG0TCqEZ-",
+                    "file_size": 73766,
+                    "width": 720,
+                    "height": 1280
+                }
+            ]
+        }
+    },
+    // type image - com caption
+    {
+        "update_id": 993143437,
+        "message": {
+            "message_id": 28,
+            "from": {
+                "id": 8989074661,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "SM CLICK",
+                "is_premium": true,
+                "user_status": "online"
+            },
+            "chat": {
+                "id": 5425710484,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "type": "private",
+                "user_status": "offline",
+                "last_seen": 1783954425
+            },
+            "date": 1783955390,
+            "is_outgoing": true,
+            "photo": [
+                {
+                    "file_id": "AgACAgEAAxkDAAMcalT_vkJiDU59x6LCWIzjgtZWiYIAAhENaxtEwqhG9ftgO456ZBkBAAMCAANtAAM6BA",
+                    "file_unique_id": "AQADEQ1rG0TCqEZy",
+                    "file_size": 15655,
+                    "width": 180,
+                    "height": 320
+                },
+                {
+                    "file_id": "AgACAgEAAxkDAAMcalT_vkJiDU59x6LCWIzjgtZWiYIAAhENaxtEwqhG9ftgO456ZBkBAAMCAAN4AAM6BA",
+                    "file_unique_id": "AQADEQ1rG0TCqEZ9",
+                    "file_size": 58899,
+                    "width": 450,
+                    "height": 800
+                },
+                {
+                    "file_id": "AgACAgEAAxkDAAMcalT_vkJiDU59x6LCWIzjgtZWiYIAAhENaxtEwqhG9ftgO456ZBkBAAMCAAN5AAM6BA",
+                    "file_unique_id": "AQADEQ1rG0TCqEZ-",
+                    "file_size": 73766,
+                    "width": 720,
+                    "height": 1280
+                }
+            ],
+            "caption": "Com caption"
+        }
+    },
+    // type video
+    {
+        "update_id": 993143438,
+        "message": {
+            "message_id": 29,
+            "from": {
+                "id": 8989074661,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "SM CLICK",
+                "is_premium": true,
+                "user_status": "online"
+            },
+            "chat": {
+                "id": 5425710484,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "type": "private",
+                "user_status": "offline",
+                "last_seen": 1783954425
+            },
+            "date": 1783955448,
+            "is_outgoing": true,
+            "video": {
+                "duration": 7,
+                "width": 464,
+                "height": 848,
+                "file_name": "IMG_2597.MOV",
+                "mime_type": "video/mp4",
+                "thumbnail": {
+                    "file_id": "AAMCAQADGQMAAx1qVP_4Mbs5C99H_uI6D-h4l_yiSQACPwcAAkTCqEb1jgjhp9FTygEAB20AAzoE",
+                    "file_unique_id": "AQADPwcAAkTCqEZy",
+                    "file_size": 16399,
+                    "width": 175,
+                    "height": 320
+                },
+                "thumb": {
+                    "file_id": "AAMCAQADGQMAAx1qVP_4Mbs5C99H_uI6D-h4l_yiSQACPwcAAkTCqEb1jgjhp9FTygEAB20AAzoE",
+                    "file_unique_id": "AQADPwcAAkTCqEZy",
+                    "file_size": 16399,
+                    "width": 175,
+                    "height": 320
+                },
+                "file_id": "BAACAgEAAxkDAAMdalT_-DG7OQvfR_7iOg_oeJf8okkAAj8HAAJEwqhG9Y4I4afRU8o6BA",
+                "file_unique_id": "AgADPwcAAkTCqEY",
+                "file_size": 1392896
+            }
+        }
+    },
+    // type files
+    {
+        "update_id": 993143439,
+        "message": {
+            "message_id": 30,
+            "from": {
+                "id": 8989074661,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "SM CLICK",
+                "is_premium": true,
+                "user_status": "online"
+            },
+            "chat": {
+                "id": 5425710484,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "type": "private",
+                "user_status": "offline",
+                "last_seen": 1783954425
+            },
+            "date": 1783955548,
+            "is_outgoing": true,
+            "document": {
+                "file_name": "Use a CabeÃ§a JavaScript.pdf",
+                "mime_type": "application/pdf",
+                "thumbnail": {
+                    "file_id": "AAMCAQADGQMAAx5qVQABXMlNboe6Aq96zzVD07HYJ9QAAkEHAAJEwqhGkRwRGRZf-ZMBAAdtAAM6BA",
+                    "file_unique_id": "AQADQQcAAkTCqEZy",
+                    "file_size": 29675,
+                    "width": 320,
+                    "height": 320
+                },
+                "thumb": {
+                    "file_id": "AAMCAQADGQMAAx5qVQABXMlNboe6Aq96zzVD07HYJ9QAAkEHAAJEwqhGkRwRGRZf-ZMBAAdtAAM6BA",
+                    "file_unique_id": "AQADQQcAAkTCqEZy",
+                    "file_size": 29675,
+                    "width": 320,
+                    "height": 320
+                },
+                "file_id": "BQACAgEAAxkDAAMealUAAVzJTW6HugKves81Q9Ox2CfUAAJBBwACRMKoRpEcERkWX_mTOgQ",
+                "file_unique_id": "AgADQQcAAkTCqEY",
+                "file_size": 126949107
+            }
+        }
+    },
+    // type fixed location
+    {
+        "update_id": 993143450,
+        "message": {
+            "message_id": 34,
+            "from": {
+                "id": 8989074661,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "SM CLICK",
+                "is_premium": true,
+                "user_status": "online"
+            },
+            "chat": {
+                "id": 5425710484,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "type": "private",
+                "user_status": "offline",
+                "last_seen": 1783954425
+            },
+            "date": 1783955686,
+            "is_outgoing": true,
+            "location": {
+                "latitude": -23.492954,
+                "longitude": -46.642029
+            }
+        }
+    },
+    // type real-time location
+    {
+        "update_id": 993143455,
+        "edited_message": {
+            "message_id": 35,
+            "from": {
+                "id": 8989074661,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "SM CLICK",
+                "is_premium": true,
+                "user_status": "online"
+            },
+            "chat": {
+                "id": 5425710484,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "type": "private",
+                "user_status": "offline",
+                "last_seen": 1783954425
+            },
+            "date": 1783955714,
+            "is_outgoing": true,
+            "edit_date": 1783955740,
+            "location": {
+                "latitude": -23.492953,
+                "longitude": -46.642033,
+                "live_period": 2147483647,
+                "heading": 223,
+                "horizontal_accuracy": 16
+            }
+        }
+    },
+    // update location permission
+    {
+        "update_id": 993143457,
+        "edited_message": {
+            "message_id": 35,
+            "from": {
+                "id": 8989074661,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "SM CLICK",
+                "is_premium": true,
+                "user_status": "online"
+            },
+            "chat": {
+                "id": 5425710484,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "type": "private",
+                "user_status": "offline",
+                "last_seen": 1783954425
+            },
+            "date": 1783955714,
+            "is_outgoing": true,
+            "edit_date": 1783955758,
+            "location": {
+                "latitude": -23.492954,
+                "longitude": -46.642029
+            }
+        }
+    },
+    // this revoke permission
+    {
+        "update_id": 993143457,
+        "edited_message": {
+            "message_id": 35,
+            "from": {
+                "id": 8989074661,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "SM CLICK",
+                "is_premium": true,
+                "user_status": "online"
+            },
+            "chat": {
+                "id": 5425710484,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "type": "private",
+                "user_status": "offline",
+                "last_seen": 1783954425
+            },
+            "date": 1783955714,
+            "is_outgoing": true,
+            "edit_date": 1783955758,
+            "location": {
+                "latitude": -23.492954,
+                "longitude": -46.642029
+            }
+        }
+    },
+    // type contact vcard
+    {
+        "update_id": 993143458,
+        "message": {
+            "message_id": 36,
+            "from": {
+                "id": 8989074661,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "SM CLICK",
+                "is_premium": true,
+                "user_status": "online"
+            },
+            "chat": {
+                "id": 5425710484,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "type": "private",
+                "user_status": "offline",
+                "last_seen": 1783954425
+            },
+            "date": 1783955810,
+            "is_outgoing": true,
+            "contact": {
+                "phone_number": "5511944446538",
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "user_id": 5425710484
+            }
+        }
+    },
+    // type gif
+    {
+        "update_id": 993143459,
+        "message": {
+            "message_id": 37,
+            "from": {
+                "id": 8989074661,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "SM CLICK",
+                "is_premium": true,
+                "user_status": "online"
+            },
+            "chat": {
+                "id": 5425710484,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "type": "private",
+                "user_status": "offline",
+                "last_seen": 1783954425
+            },
+            "date": 1783955870,
+            "is_outgoing": true,
+            "animation": {
+                "file_name": "Flushed.mp4",
+                "mime_type": "video/mp4",
+                "duration": 1,
+                "width": 1040,
+                "height": 1040,
+                "thumbnail": {
+                    "file_id": "AAMCBAADGQMAAyVqVQGeSySnYtrKsVzI87mJcRTG6AACLQ4AAk6ySFAL02xzr5EZbAEAB20AAzoE",
+                    "file_unique_id": "AQADLQ4AAk6ySFBy",
+                    "file_size": 28318,
+                    "width": 320,
+                    "height": 320
+                },
+                "thumb": {
+                    "file_id": "AAMCBAADGQMAAyVqVQGeSySnYtrKsVzI87mJcRTG6AACLQ4AAk6ySFAL02xzr5EZbAEAB20AAzoE",
+                    "file_unique_id": "AQADLQ4AAk6ySFBy",
+                    "file_size": 28318,
+                    "width": 320,
+                    "height": 320
+                },
+                "file_id": "CgACAgQAAxkDAAMlalUBnkskp2LayrFcyPO5iXEUxugAAi0OAAJOskhQC9Nsc6-RGWw6BA",
+                "file_unique_id": "AgADLQ4AAk6ySFA",
+                "file_size": 172905
+            },
+            "document": {
+                "file_name": "Flushed.mp4",
+                "mime_type": "video/mp4",
+                "thumbnail": {
+                    "file_id": "AAMCBAADGQMAAyVqVQGeSySnYtrKsVzI87mJcRTG6AACLQ4AAk6ySFAL02xzr5EZbAEAB20AAzoE",
+                    "file_unique_id": "AQADLQ4AAk6ySFBy",
+                    "file_size": 28318,
+                    "width": 320,
+                    "height": 320
+                },
+                "thumb": {
+                    "file_id": "AAMCBAADGQMAAyVqVQGeSySnYtrKsVzI87mJcRTG6AACLQ4AAk6ySFAL02xzr5EZbAEAB20AAzoE",
+                    "file_unique_id": "AQADLQ4AAk6ySFBy",
+                    "file_size": 28318,
+                    "width": 320,
+                    "height": 320
+                },
+                "file_id": "CgACAgQAAxkDAAMlalUBnkskp2LayrFcyPO5iXEUxugAAi0OAAJOskhQC9Nsc6-RGWw6BA",
+                "file_unique_id": "AgADLQ4AAk6ySFA",
+                "file_size": 172905
+            }
+        }
+    },
+    // type video-note
+    {
+        "update_id": 993143460,
+        "message": {
+            "message_id": 38,
+            "from": {
+                "id": 8989074661,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "SM CLICK",
+                "is_premium": true,
+                "user_status": "online"
+            },
+            "chat": {
+                "id": 5425710484,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "type": "private",
+                "user_status": "offline",
+                "last_seen": 1783954425
+            },
+            "date": 1783955910,
+            "is_outgoing": true,
+            "video_note": {
+                "duration": 5,
+                "length": 400,
+                "thumbnail": {
+                    "file_id": "AAMCAQADGQMAAyZqVQHFMDInIeqmNgEw-2vXDQNImgACRAcAAkTCqEZ16sXppMXnBAEAB20AAzoE",
+                    "file_unique_id": "AQADRAcAAkTCqEZy",
+                    "file_size": 16247,
+                    "width": 320,
+                    "height": 320
+                },
+                "thumb": {
+                    "file_id": "AAMCAQADGQMAAyZqVQHFMDInIeqmNgEw-2vXDQNImgACRAcAAkTCqEZ16sXppMXnBAEAB20AAzoE",
+                    "file_unique_id": "AQADRAcAAkTCqEZy",
+                    "file_size": 16247,
+                    "width": 320,
+                    "height": 320
+                },
+                "file_id": "DQACAgEAAxkDAAMmalUBxTAyJyHqpjYBMPtr1w0DSJoAAkQHAAJEwqhGderF6aTF5wQ6BA",
+                "file_unique_id": "AgADRAcAAkTCqEY",
+                "file_size": 545028
+            }
+        }
+    },
+    // type checklist
+    {
+        "update_id": 993143461,
+        "message": {
+            "message_id": 39,
+            "from": {
+                "id": 8989074661,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "SM CLICK",
+                "is_premium": true,
+                "user_status": "online"
+            },
+            "chat": {
+                "id": 5425710484,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "type": "private",
+                "user_status": "offline",
+                "last_seen": 1783954425
+            },
+            "date": 1783955945,
+            "is_outgoing": true,
+            "checklist": {
+                "title": "Envio",
+                "tasks": [
+                    {
+                        "id": 1,
+                        "text": "De"
+                    },
+                    {
+                        "id": 2,
+                        "text": "Listas"
+                    }
+                ],
+                "others_can_add_tasks": true,
+                "others_can_mark_tasks_as_done": true
+            }
+        }
+    },
+    // type checklist updated
+    {
+        "update_id": 993143462,
+        "message": {
+            "message_id": 40,
+            "from": {
+                "id": 8989074661,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "SM CLICK",
+                "is_premium": true,
+                "user_status": "online"
+            },
+            "chat": {
+                "id": 5425710484,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "type": "private",
+                "user_status": "offline",
+                "last_seen": 1783954425
+            },
+            "date": 1783955959,
+            "is_outgoing": true,
+            "checklist_tasks_done": {
+                "checklist_message": {
+                    "message_id": 39,
+                    "from": {
+                        "id": 8989074661,
+                        "is_bot": false,
+                        "is_deleted": false,
+                        "first_name": "SM CLICK",
+                        "is_premium": true,
+                        "user_status": "online"
+                    },
+                    "chat": {
+                        "id": 5425710484,
+                        "first_name": "Leo Cel",
+                        "last_name": "Novo",
+                        "username": "leoaraujo98",
+                        "type": "private",
+                        "user_status": "offline",
+                        "last_seen": 1783954425
+                    },
+                    "date": 1783955945,
+                    "is_outgoing": true,
+                    "checklist": {
+                        "title": "Envio",
+                        "tasks": [
+                            {
+                                "id": 1,
+                                "text": "De",
+                                "completed_by_user": {
+                                    "id": 8989074661,
+                                    "is_bot": false,
+                                    "is_deleted": false,
+                                    "first_name": "SM CLICK",
+                                    "is_premium": true,
+                                    "user_status": "online"
+                                },
+                                "completion_date": 1783955959
+                            },
+                            {
+                                "id": 2,
+                                "text": "Listas"
+                            }
+                        ],
+                        "others_can_add_tasks": true,
+                        "others_can_mark_tasks_as_done": true
+                    }
+                },
+                "marked_as_done_task_ids": [
+                    1
+                ]
+            }
+        }
+    },
+    // type - deleted
+    {
+        "update_id": 993143467,
+        "deleted_messages": {
+            "chat": {
+                "id": 5425710484,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "type": "private",
+                "user_status": "online"
+            },
+            "message_ids": [
+                42,
+                44,
+                43
+            ]
+        }
+    },
+    // type quoted message
+    {
+        "update_id": 993143469,
+        "message": {
+            "message_id": 46,
+            "from": {
+                "id": 8989074661,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "SM CLICK",
+                "is_premium": true,
+                "user_status": "online"
+            },
+            "chat": {
+                "id": 5425710484,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "type": "private",
+                "user_status": "online"
+            },
+            "date": 1783956151,
+            "is_outgoing": true,
+            "reply_to_message": {
+                "message_id": 41,
+                "from": {
+                    "id": 5425710484,
+                    "is_bot": false,
+                    "is_deleted": false,
+                    "first_name": "Leo Cel",
+                    "last_name": "Novo",
+                    "username": "leoaraujo98",
+                    "user_status": "online"
+                },
+                "chat": {
+                    "id": 5425710484,
+                    "first_name": "Leo Cel",
+                    "last_name": "Novo",
+                    "username": "leoaraujo98",
+                    "type": "private",
+                    "user_status": "online"
+                },
+                "date": 1783956018,
+                "is_outgoing": false,
+                "text": "Teste de citação"
+            },
+            "text": "Opa"
+        }
+    },
+    // message quoted in a specific location
+    {
+        "update_id": 993143468,
+        "message": {
+            "message_id": 45,
+            "from": {
+                "id": 8989074661,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "SM CLICK",
+                "is_premium": true,
+                "user_status": "online"
+            },
+            "chat": {
+                "id": 5425710484,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "type": "private",
+                "user_status": "online"
+            },
+            "date": 1783956132,
+            "is_outgoing": true,
+            "reply_to_message": {
+                "message_id": 41,
+                "from": {
+                    "id": 5425710484,
+                    "is_bot": false,
+                    "is_deleted": false,
+                    "first_name": "Leo Cel",
+                    "last_name": "Novo",
+                    "username": "leoaraujo98",
+                    "user_status": "online"
+                },
+                "chat": {
+                    "id": 5425710484,
+                    "first_name": "Leo Cel",
+                    "last_name": "Novo",
+                    "username": "leoaraujo98",
+                    "type": "private",
+                    "user_status": "online"
+                },
+                "date": 1783956018,
+                "is_outgoing": false,
+                "text": "Teste de citação"
+            },
+            "quote": {
+                "text": "citação",
+                "position": 9,
+                "is_manual": true
+            },
+            "text": "Esse trecho"
+        }
+    },
+    // type poll
+    {
+        "update_id": 993143529,
+        "message": {
+            "message_id": 121,
+            "from": {
+                "id": 8989074661,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "SM CLICK",
+                "is_premium": true,
+                "user_status": "online"
+            },
+            "chat": {
+                "id": -5558416090,
+                "title": "Teste cria\u00e7\u00e3o",
+                "type": "group",
+                "all_members_are_administrators": false,
+                "accepted_gift_types": {
+                    "unlimited_gifts": false,
+                    "limited_gifts": false,
+                    "unique_gifts": false,
+                    "premium_subscription": false,
+                    "gifts_from_channels": false
+                }
+            },
+            "date": 1784126052,
+            "is_outgoing": true,
+            "poll": {
+                "id": "5096030880556646863",
+                "question": "Perguntas",
+                "options": [
+                    {
+                        "text": "Pergunta 1",
+                        "voter_count": 0
+                    },
+                    {
+                        "text": "Pergunta 2",
+                        "voter_count": 0
+                    }
+                ],
+                "total_voter_count": 0,
+                "is_closed": false,
+                "is_anonymous": false,
+                "type": "regular",
+                "allows_multiple_answers": true
+            }
+        }
+    },
+    // type poll answer
+    {
+        "update_id": 993143530,
+        "poll": {
+            "id": "5096030880556646863",
+            "question": "Perguntas",
+            "options": [
+                {
+                    "text": "Pergunta 1",
+                    "voter_count": 1
+                },
+                {
+                    "text": "Pergunta 2",
+                    "voter_count": 0
+                }
+            ],
+            "total_voter_count": 1,
+            "is_closed": false,
+            "is_anonymous": false,
+            "type": "regular",
+            "allows_multiple_answers": true
+        }
+    }
+]

@@ -197,6 +197,7 @@ class Client final : public WebhookActor::Callback {
   class JsonChatBoosts;
   class JsonChatOwnerChanged;
   class JsonChatOwnerLeft;
+  class JsonChatJoined;
   class JsonForumTopicCreated;
   class JsonForumTopicEdited;
   class JsonForumTopicInfo;
@@ -215,6 +216,7 @@ class Client final : public WebhookActor::Callback {
   class JsonBusinessBotRights;
   class JsonBusinessConnection;
   class JsonBusinessMessagesDeleted;
+  class JsonDeletedMessages;
   class JsonAddress;
   class JsonOrderInfo;
   class JsonStory;
@@ -638,14 +640,14 @@ class Client final : public WebhookActor::Callback {
 
   static td::Result<object_ptr<td_api::StickerFormat>> get_sticker_format(td::Slice sticker_format);
 
-  td::Result<object_ptr<td_api::inputSticker>> get_legacy_input_sticker(const Query *query) const;
+  td::Result<object_ptr<td_api::newSticker>> get_legacy_input_sticker(const Query *query) const;
 
-  td::Result<object_ptr<td_api::inputSticker>> get_input_sticker(const Query *query) const;
+  td::Result<object_ptr<td_api::newSticker>> get_input_sticker(const Query *query) const;
 
-  td::Result<object_ptr<td_api::inputSticker>> get_input_sticker(const Query *query, td::JsonValue &&value,
+  td::Result<object_ptr<td_api::newSticker>> get_input_sticker(const Query *query, td::JsonValue &&value,
                                                                  td::Slice default_sticker_format) const;
 
-  td::Result<td::vector<object_ptr<td_api::inputSticker>>> get_input_stickers(const Query *query) const;
+  td::Result<td::vector<object_ptr<td_api::newSticker>>> get_input_stickers(const Query *query) const;
 
   static td::Result<object_ptr<td_api::InputFile>> get_sticker_input_file(const Query *query,
                                                                           td::Slice field_name = "sticker");
@@ -1261,6 +1263,7 @@ class Client final : public WebhookActor::Callback {
     bool is_from_offline = false;
     bool is_scheduled = false;
     bool is_paid_post = false;
+    bool is_outgoing = false;
     mutable bool is_content_changed = false;
   };
 
@@ -1482,6 +1485,8 @@ class Client final : public WebhookActor::Callback {
     EditedBusinessMessage,
     BusinessMessagesDeleted,
     PurchasedPaidMedia,
+    DeletedMessages,
+    ChatJoined,
     Size
   };
 

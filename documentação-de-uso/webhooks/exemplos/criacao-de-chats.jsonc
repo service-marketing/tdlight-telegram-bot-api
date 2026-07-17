@@ -1,0 +1,61 @@
+[
+    // Type create chat:
+    {
+        "update_id": 993143483,
+        "message": {
+            "message_id": 83,
+            "from": {
+                "id": 5425710484,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "user_status": "online"
+            },
+            "chat": {
+                "id": 5425710484,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "type": "private",
+                "user_status": "online"
+            },
+            "date": 1784035091,
+            "is_outgoing": false,
+            "text": "Eaeee"
+        }
+    },
+    // type create group:
+    {
+        "update_id": 993143484,
+        "message": {
+            "message_id": 84,
+            "from": {
+                "id": 5425710484,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "user_status": "online"
+            },
+            "chat": {
+                "id": -5558416090,
+                "title": "Teste criação",
+                "type": "group",
+                "all_members_are_administrators": false,
+                "accepted_gift_types": {
+                    "unlimited_gifts": false,
+                    "limited_gifts": false,
+                    "unique_gifts": false,
+                    "premium_subscription": false,
+                    "gifts_from_channels": false
+                }
+            },
+            "date": 1784035212,
+            "is_outgoing": false,
+            "group_chat_created": true
+        }
+    }
+]
