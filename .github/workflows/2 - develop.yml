@@ -1,0 +1,17 @@
+name: Build and Push to ECR
+
+on:
+  push:
+    branches: ["master"]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Testing td-light build
+        run: |
+          echo "Testing td-light build"
