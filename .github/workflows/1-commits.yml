@@ -10,6 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     environment: development_env
 
+    steps:
+      - name: Run only if PR was merged
+        run: echo "This pull request was merged!"
+
   create_pr:
     needs: infra-validation
     runs-on: ubuntu-latest
