@@ -895,5 +895,52 @@
             "type": "regular",
             "allows_multiple_answers": true
         }
+    },
+    // forwarded message
+    {
+        "update_id": 993143588,
+        "message": {
+            "message_id": 193,
+            "from": {
+                "id": 8989074661,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "SM CLICK",
+                "is_premium": true,
+                "user_status": "online"
+            },
+            "chat": {
+                "id": 5425710484,
+                "first_name": "Leo Cel",
+                "last_name": "Novo",
+                "username": "leoaraujo98",
+                "type": "private",
+                "user_status": "online"
+            },
+            "date": 1784634833,
+            "is_outgoing": true,
+            "forward_origin": {
+                "type": "user",
+                "sender_user": {
+                    "id": 8989074661,
+                    "is_bot": false,
+                    "is_deleted": false,
+                    "first_name": "SM CLICK",
+                    "is_premium": true,
+                    "user_status": "online"
+                },
+                "date": 1784634778
+            },
+            "forward_from": {
+                "id": 8989074661,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "SM CLICK",
+                "is_premium": true,
+                "user_status": "online"
+            },
+            "forward_date": 1784634778,
+            "text": "Teste"
+        }
     }
 ]

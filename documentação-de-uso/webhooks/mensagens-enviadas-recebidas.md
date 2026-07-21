@@ -72,4 +72,25 @@ Mesma estrutura de [README.md](README.md#mensagens-apagadas-deleted_messages). `
 ## Citação em mensagem enviada
 
 Mesma estrutura de `reply_to_message`/`quote` de [chats-individuais.md](chats-individuais.md#mensagem-citando-outra-reply), só com `is_outgoing: true` na mensagem que cita.
+
+## Mensagem encaminhada (forward)
+
+Encaminhar mensagem soma três campos no nível da `message`: `forward_origin`, `forward_from` (legado, espelha `forward_origin.sender_user`) e `forward_date` (timestamp do envio original, não confundir com `date`, que é quando o encaminhamento aconteceu).
+
+```json
+{
+  "date": 1784634833,
+  "is_outgoing": true,
+  "forward_origin": {
+    "type": "user",
+    "sender_user": { "id": 8989074661, "first_name": "SM CLICK", "is_premium": true },
+    "date": 1784634778
+  },
+  "forward_from": { "id": 8989074661, "first_name": "SM CLICK", "is_premium": true },
+  "forward_date": 1784634778,
+  "text": "Teste"
+}
+```
+
+`forward_origin.type` varia conforme origem: `user` (`sender_user` presente, como acima), `chat`/`channel` (`sender_chat`/`chat` no lugar de `sender_user`) ou `hidden_user` (`sender_user_name` como texto, sem `id` — remetente escondeu conta). Conteúdo (texto, mídia etc.) segue o mesmo formato normal do tipo, sem mudança.
 </content>
