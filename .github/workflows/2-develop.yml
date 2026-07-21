@@ -12,6 +12,7 @@ env:
   AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
   ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
   IMAGE_TAG: "v1.0.0"
+  GIT_SECRET_TOKEN: ${{ secrets.GIT_SECRET_TOKEN }}
 
 jobs:
   validate-if-have-to-run:
@@ -35,7 +36,7 @@ jobs:
         with:
           fetch-depth: 0
           ref: develop
-          token: ${{ secrets.GIT_SECRET_TOKEN }}
+          token: ${{ env.GIT_SECRET_TOKEN }}
 
       - name: Set pnpm configuration
         run: |
@@ -80,7 +81,7 @@ jobs:
       - name: Check if release PR already exists
         id: check_release_pr
         env:
-          GH_TOKEN: ${{ secrets.GIT_SECRET_TOKEN }}
+          GH_TOKEN: ${{ env.GIT_SECRET_TOKEN }}
         run: |
           git fetch --tags
           TAG=$(git tag --sort=-version:refname | head -n 1)
@@ -125,7 +126,7 @@ jobs:
 
       - name: Post New Release
         env:
-          GITHUB_TOKEN: ${{ secrets.GIT_SECRET_TOKEN }}
+          GITHUB_TOKEN: ${{ env.GIT_SECRET_TOKEN }}
         run: |
           git push --follow-tags origin develop
 
@@ -194,7 +195,7 @@ jobs:
       - name: Check For Open Pull Requests
         id: check_pr
         env:
-          GH_TOKEN: ${{ secrets.GIT_SECRET_TOKEN }}
+          GH_TOKEN: ${{ env.GIT_SECRET_TOKEN }}
         run: |
           gh pr list --state open --base release/${TAG} --json title,number
           PR_WITH_VERSION=$(gh pr list --state open --base release/${TAG} --json title,number | jq --arg TAG "develop -> release/${TAG}" '[.[] | select(.title | contains($TAG))] | length')
@@ -242,7 +243,7 @@ jobs:
         if: steps.create_branch.outputs.branch_created == 'true'
         uses: repo-sync/pull-request@v2
         with:
-          github_token: ${{ secrets.GIT_SECRET_TOKEN }}
+          github_token: ${{ env.GIT_SECRET_TOKEN }}
           pr_title: "${{ github.ref_name }} -> ${{ env.NEW_BRANCH }}"
           source_branch: "${{ github.ref_name }}"
           destination_branch: "${{ env.NEW_BRANCH }}"
