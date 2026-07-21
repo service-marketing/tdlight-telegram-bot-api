@@ -35,6 +35,7 @@ jobs:
         with:
           fetch-depth: 0
           ref: develop
+          token: ${{ secrets.GIT_SECRET_TOKEN }}
 
       - name: Set pnpm configuration
         run: |
