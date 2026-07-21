@@ -1,0 +1,23 @@
+name: Build & Validate & PR - Release
+
+on:
+  push:
+    branches:
+      - release/*
+
+jobs:
+  create-pr-to-master:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create Pull Request to master
+        uses: repo-sync/pull-request@v2
+        with:
+          github_token: ${{ secrets.GIT_SECRET_TOKEN }}
+          pr_title: "${{ github.ref_name }} -> Production"
+          source_branch: "${{ github.ref_name }}"
+          destination_branch: "master"
+          pr_label: "PRODUCTION"
