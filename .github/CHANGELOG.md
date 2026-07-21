@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.1-alpha.0](https://github.com/service-marketing/tdlight-telegram-bot-api/compare/v1.0.0-alpha.6...v1.0.1-alpha.0) (2026-07-21)
+
 ## [1.0.0-alpha.6](https://github.com/service-marketing/tdlight-telegram-bot-api/compare/v1.0.0-alpha.5...v1.0.0-alpha.6) (2026-07-21)
 
 ## [1.0.0-alpha.5](https://github.com/service-marketing/tdlight-telegram-bot-api/compare/v1.0.0-alpha.4...v1.0.0-alpha.5) (2026-07-21)
