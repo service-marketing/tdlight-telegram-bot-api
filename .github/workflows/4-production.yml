@@ -7,7 +7,6 @@ on:
 
 jobs:
   build-and-push-to-ecr:
-    needs: generate-new-version
     runs-on: ubuntu-latest
 
     steps:
