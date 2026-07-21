@@ -24,8 +24,7 @@ jobs:
 
   generate-new-version:
     if: "!startsWith(github.head_ref, 'hotfix')"
-    needs:
-      - validate-if-have-to-run
+    needs: validate-if-have-to-run
     runs-on: ubuntu-latest
     outputs:
       new_version: ${{ steps.get_version.outputs.version }}
@@ -130,6 +129,7 @@ jobs:
           git push --follow-tags origin develop
 
   build-and-push-to-ecr:
+    needs: generate-new-version
     runs-on: ubuntu-latest
 
     steps:
@@ -203,8 +203,7 @@ jobs:
 
   create-release-branch-and-pr:
     if: needs.check-pr.outputs.pr_with_version == '0'
-    needs:
-      - check-pr
+    needs: check-pr
     runs-on: ubuntu-latest
 
     steps:
