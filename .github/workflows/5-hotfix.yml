@@ -1,0 +1,43 @@
+name: Hotfix - to master and Develop
+
+on:
+  push:
+    branches:
+      - hotfix/*
+
+jobs:
+  create-pr-from-master-and-develop:
+    runs-on: ubuntu-latest
+    if: always()
+
+    steps:
+      - name: Check Repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          ref: develop
+          token: ${{ secrets.GIT_SECRET_TOKEN }}
+
+      - name: pull develop
+        run: |
+          git fetch --all
+          git checkout develop
+          git pull
+
+      - name: Create Pull Request to Master
+        uses: repo-sync/pull-request@v2
+        with:
+          github_token: ${{ secrets.GIT_SECRET_TOKEN }}
+          pr_title: "${{ github.ref_name }} -> Production"
+          source_branch: ${{ github.ref_name }}
+          destination_branch: "master"
+          pr_label: "HOTFIX"
+
+      - name: Create Pull Request to Development
+        uses: repo-sync/pull-request@v2
+        with:
+          github_token: ${{ secrets.GIT_SECRET_TOKEN }}
+          pr_title: "${{ github.ref_name }} -> Develop"
+          source_branch: ${{ github.ref_name }}
+          destination_branch: "develop"
+          pr_label: "HOTFIX"
