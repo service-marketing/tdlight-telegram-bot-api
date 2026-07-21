@@ -14,7 +14,122 @@ env:
   IMAGE_TAG: "v1.0.0"
 
 jobs:
-  build-and-push:
+  validate-if-have-to-run:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Run only if PR was merged
+        run: echo "This pull request was merged!"
+
+  generate-new-version:
+    if: "!startsWith(github.head_ref, 'hotfix')"
+    needs:
+      - validate-if-have-to-run
+    runs-on: ubuntu-latest
+    outputs:
+      new_version: ${{ steps.get_version.outputs.version }}
+
+    steps:
+      - name: Check Repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          ref: develop
+
+      - name: Set pnpm configuration
+        run: |
+          echo 'package-manager-strict=false' >> ~/.npmrc
+          echo 'COREPACK_ENABLE_STRICT=0' >> ~/.npmrc
+
+      - name: Install PNPM
+        run: npm install -g pnpm@10.33.2
+
+      - name: Install Dependencies
+        run: |
+          cd .github
+          pnpm install --no-frozen-lockfile
+
+      - name: Configuration Git ID
+        run: |
+          git config --global user.name "SMTitoBOT"
+          git config --global user.email "tito@grupo-sm-solucoes.com"
+
+      - name: Get Last Commit Message from PR Branch
+        id: get_commit_message
+        run: |
+          git fetch origin ${{ github.event.pull_request.head.ref }}
+          LAST_COMMIT_MESSAGE=$(git log -1 --pretty=format:%s origin/${{ github.event.pull_request.head.ref }})
+          echo "LAST_COMMIT_MESSAGE=${LAST_COMMIT_MESSAGE}" >> $GITHUB_ENV
+
+      - name: Determine version type
+        id: version_type
+        run: |
+          LAST_COMMIT_MESSAGE="${{ env.LAST_COMMIT_MESSAGE }}"
+
+          if [[ "$LAST_COMMIT_MESSAGE" == fix:* ]]; then
+            echo "version_type=patch" >> $GITHUB_ENV
+          elif [[ "$LAST_COMMIT_MESSAGE" == feat:* ]]; then
+            echo "version_type=minor" >> $GITHUB_ENV
+          elif [[ "$LAST_COMMIT_MESSAGE" == *"BREAKING CHANGE:"* ]]; then
+            echo "version_type=major" >> $GITHUB_ENV
+          else
+            echo "version_type=patch" >> $GITHUB_ENV
+          fi
+
+      - name: Check if release PR already exists
+        id: check_release_pr
+        env:
+          GH_TOKEN: ${{ secrets.GIT_SECRET_TOKEN }}
+        run: |
+          git fetch --tags
+          TAG=$(git tag --sort=-version:refname | head -n 1)
+          CLEAN_TAG=$(echo "$TAG" | sed 's/-alpha\.[0-9]*//')
+          echo "Latest tag: $TAG | Clean: $CLEAN_TAG"
+
+          if [[ -n "$CLEAN_TAG" ]]; then
+            PR_COUNT=$(gh pr list --state open --head "release/${CLEAN_TAG}" --base main --json number | jq 'length')
+          else
+            PR_COUNT=0
+          fi
+
+          echo "release_pr_exists=$PR_COUNT" >> $GITHUB_OUTPUT
+          echo "PRs release/${CLEAN_TAG} -> main: $PR_COUNT"
+
+      - name: Start New Release
+        run: |
+          cd .github
+          CURRENT_VERSION=$(jq -r '.version' package.json)
+          RELEASE_PR_EXISTS="${{ steps.check_release_pr.outputs.release_pr_exists }}"
+          echo "Versão atual: $CURRENT_VERSION | Release PR exists: $RELEASE_PR_EXISTS"
+
+          if [[ "$RELEASE_PR_EXISTS" != "0" && "$RELEASE_PR_EXISTS" != "" ]]; then
+            echo "Release PR já existe para versão atual. Iniciando novo ciclo..."
+            BASE_VERSION=$(echo "$CURRENT_VERSION" | sed 's/-alpha.*//')
+            jq --arg v "$BASE_VERSION" '.version = $v' package.json > tmp.json && mv tmp.json package.json
+            npx standard-version --release-as ${{ env.version_type }} --prerelease alpha
+          elif echo "$CURRENT_VERSION" | grep -q "alpha"; then
+            echo "Já em ciclo alpha. Incrementando prerelease..."
+            npx standard-version --prerelease alpha
+          else
+            echo "Novo ciclo de release. Bump ${{ env.version_type }} + prerelease alpha..."
+            npx standard-version --release-as ${{ env.version_type }} --prerelease alpha
+          fi
+
+      - name: Get New Version
+        id: get_version
+        run: |
+          VERSION=$(jq -r '.version' .github/package.json)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Nova versão gerada: $VERSION"
+
+      - name: Post New Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_SECRET_TOKEN }}
+        run: |
+          git push --follow-tags origin develop
+
+  build-and-push-to-ecr:
     runs-on: ubuntu-latest
 
     steps:
@@ -27,28 +142,108 @@ jobs:
         run: |
           echo "Restarting..."
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
+      # - name: Configure AWS Credentials
+      #   uses: aws-actions/configure-aws-credentials@v4
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: ${{ env.AWS_REGION }}
+
+      # - name: Login to Amazon ECR
+      #   run: |
+      #     aws ecr get-login-password --region $AWS_REGION \
+      #       | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+
+      # - name: Build Docker Image
+      #   run: |
+      #     docker build -t $ECR_REPOSITORY .
+
+      # - name: Tag Docker Image
+      #   run: |
+      #     docker tag $ECR_REPOSITORY:latest \
+      #       $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
+
+      # - name: Push to ECR
+      #   run: |
+      #     docker push \
+      #       $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
+
+  check-pr:
+    if: >
+      github.event.pull_request.merged == true &&
+      startsWith(github.head_ref, 'hotfix/') == false
+    needs: build-and-push-to-ecr
+    runs-on: ubuntu-latest
+    outputs:
+      pr_with_version: ${{ steps.check_pr.outputs.pr_with_version }}
+
+    steps:
+      - name: Check Repository
+        uses: actions/checkout@v4
+
+      - name: Get Latest Tag
+        id: get_tag
+        run: |
+          git fetch --tags
+          TAG=$(git tag --sort=-version:refname | head -n 1)
+          CLEAN_TAG=$(echo "$TAG" | sed 's/-alpha\.[0-9]*//')
+          echo "TAG=${CLEAN_TAG}" >> $GITHUB_ENV
+          echo "TAG=${CLEAN_TAG}" >> $GITHUB_OUTPUT
+
+      - name: Check For Open Pull Requests
+        id: check_pr
+        env:
+          GH_TOKEN: ${{ secrets.GIT_SECRET_TOKEN }}
+        run: |
+          gh pr list --state open --base release/${TAG} --json title,number
+          PR_WITH_VERSION=$(gh pr list --state open --base release/${TAG} --json title,number | jq --arg TAG "develop -> release/${TAG}" '[.[] | select(.title | contains($TAG))] | length')
+          echo "PR_WITH_VERSION=${PR_WITH_VERSION}"
+          echo "pr_with_version=${PR_WITH_VERSION}" >> $GITHUB_ENV
+          echo "pr_with_version=${PR_WITH_VERSION}" >> $GITHUB_OUTPUT
+
+  create-release-branch-and-pr:
+    if: needs.check-pr.outputs.pr_with_version == '0'
+    needs:
+      - check-pr
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Get New Tag
+        id: get_tag
+        run: |
+          git fetch --tags
+          TAG=$(git tag --sort=-version:refname | head -n 1)
+          CLEAN_TAG=$(echo "$TAG" | sed 's/-alpha\.[0-9]*//')
+          echo "TAG=${CLEAN_TAG}" >> $GITHUB_ENV
+          echo "Nova tag: $CLEAN_TAG"
+
+      - name: Create New Branch
+        id: create_branch
+        run: |
+          git fetch --all
+          NEW_BRANCH="release/${{ env.TAG }}"
+          echo "NEW_BRANCH=${NEW_BRANCH}" >> $GITHUB_ENV
+
+          if git ls-remote --heads origin "$NEW_BRANCH" | grep -q "$NEW_BRANCH"; then
+            echo "Branch $NEW_BRANCH already exists. Skipping creation."
+            echo "branch_created=false" >> $GITHUB_OUTPUT
+          else
+            git checkout main
+            git pull origin main
+            git checkout -b $NEW_BRANCH
+            git push origin $NEW_BRANCH
+            echo "branch_created=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create Pull Request to Release
+        if: steps.create_branch.outputs.branch_created == 'true'
+        uses: repo-sync/pull-request@v2
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
-
-      - name: Login to Amazon ECR
-        run: |
-          aws ecr get-login-password --region $AWS_REGION \
-            | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
-
-      - name: Build Docker Image
-        run: |
-          docker build -t $ECR_REPOSITORY .
-
-      - name: Tag Docker Image
-        run: |
-          docker tag $ECR_REPOSITORY:latest \
-            $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
-
-      - name: Push to ECR
-        run: |
-          docker push \
-            $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
+          github_token: ${{ secrets.GIT_SECRET_TOKEN }}
+          pr_title: "${{ github.ref_name }} -> ${{ env.NEW_BRANCH }}"
+          source_branch: "${{ github.ref_name }}"
+          destination_branch: "${{ env.NEW_BRANCH }}"
+          pr_label: "homologation"

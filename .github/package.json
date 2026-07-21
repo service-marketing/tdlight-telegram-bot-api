@@ -1,0 +1,15 @@
+{
+  "name": "sm-tdlight-telegram-bot-api",
+  "version": "1.0.0-alpha.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "release": "standard-version"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "standard-version": "^9.5.0"
+  }
+}
