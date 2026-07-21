@@ -140,7 +140,7 @@ jobs:
 
       - name: Restart pipe
         run: |
-          echo "Restarting..."
+          echo "Restarting...."
 
       # - name: Configure AWS Credentials
       #   uses: aws-actions/configure-aws-credentials@v4
