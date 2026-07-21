@@ -1,0 +1,29 @@
+name: Feature Branch to Develop
+
+on:
+  push:
+    branches:
+      - feature/*
+
+jobs:
+  infra-validation:
+    runs-on: ubuntu-latest
+    environment: development_env
+
+  create_pr:
+    needs: infra-validation
+    runs-on: ubuntu-latest
+    if: always()
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Create Pull Request to Development
+        uses: repo-sync/pull-request@v2
+        with:
+          github_token: ${{ secrets.GIT_SECRET_TOKEN }}
+          pr_title: "${{ github.ref_name }} -> develop"
+          source_branch: ${{ github.ref_name }}
+          destination_branch: "develop"
+          pr_label: "DEVELOP"
