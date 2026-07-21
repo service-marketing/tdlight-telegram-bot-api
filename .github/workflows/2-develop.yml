@@ -89,13 +89,13 @@ jobs:
           echo "Latest tag: $TAG | Clean: $CLEAN_TAG"
 
           if [[ -n "$CLEAN_TAG" ]]; then
-            PR_COUNT=$(gh pr list --state open --head "release/${CLEAN_TAG}" --base master --json number | jq 'length')
+            PR_COUNT=$(gh pr list --state all --head "release/${CLEAN_TAG}" --base master --json number | jq 'length')
           else
             PR_COUNT=0
           fi
 
           echo "release_pr_exists=$PR_COUNT" >> $GITHUB_OUTPUT
-          echo "PRs release/${CLEAN_TAG} -> master: $PR_COUNT"
+          echo "PRs release/${CLEAN_TAG} -> master (open+merged+closed): $PR_COUNT"
 
       - name: Start New Release
         run: |
