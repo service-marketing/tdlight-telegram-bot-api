@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0-alpha.5](https://github.com/service-marketing/tdlight-telegram-bot-api/compare/v1.0.0-alpha.4...v1.0.0-alpha.5) (2026-07-21)
+
+
+### Features
+
+* ✨ add reactions webhook ([79ef741](https://github.com/service-marketing/tdlight-telegram-bot-api/commit/79ef741b16c3a17e544658ebe24dc1a5877c1d5f))
+
 ## [1.0.0-alpha.4](https://github.com/service-marketing/tdlight-telegram-bot-api/compare/v1.0.0-alpha.3...v1.0.0-alpha.4) (2026-07-21)
 
 ## [1.0.0-alpha.3](https://github.com/service-marketing/tdlight-telegram-bot-api/compare/v1.0.0-alpha.2...v1.0.0-alpha.3) (2026-07-21)
