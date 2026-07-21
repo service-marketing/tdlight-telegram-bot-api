@@ -88,13 +88,13 @@ jobs:
           echo "Latest tag: $TAG | Clean: $CLEAN_TAG"
 
           if [[ -n "$CLEAN_TAG" ]]; then
-            PR_COUNT=$(gh pr list --state open --head "release/${CLEAN_TAG}" --base main --json number | jq 'length')
+            PR_COUNT=$(gh pr list --state open --head "release/${CLEAN_TAG}" --base master --json number | jq 'length')
           else
             PR_COUNT=0
           fi
 
           echo "release_pr_exists=$PR_COUNT" >> $GITHUB_OUTPUT
-          echo "PRs release/${CLEAN_TAG} -> main: $PR_COUNT"
+          echo "PRs release/${CLEAN_TAG} -> master: $PR_COUNT"
 
       - name: Start New Release
         run: |
@@ -223,7 +223,7 @@ jobs:
       - name: Create New Branch
         id: create_branch
         run: |
-          git fetch --all
+          git fetch origin master
           NEW_BRANCH="release/${{ env.TAG }}"
           echo "NEW_BRANCH=${NEW_BRANCH}" >> $GITHUB_ENV
 
@@ -231,8 +231,8 @@ jobs:
             echo "Branch $NEW_BRANCH already exists. Skipping creation."
             echo "branch_created=false" >> $GITHUB_OUTPUT
           else
-            git checkout main
-            git pull origin main
+            git checkout master
+            git pull origin master
             git checkout -b $NEW_BRANCH
             git push origin $NEW_BRANCH
             echo "branch_created=true" >> $GITHUB_OUTPUT
