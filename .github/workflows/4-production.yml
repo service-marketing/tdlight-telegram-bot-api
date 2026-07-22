@@ -15,8 +15,10 @@ env:
   GIT_SECRET_TOKEN: ${{ secrets.GIT_SECRET_TOKEN }}
 
 jobs:
-  build-and-push-to-ecr:
+  build-image:
     runs-on: ubuntu-latest
+    outputs:
+      image_tag: ${{ steps.get_version.outputs.version }}
 
     steps:
       - name: Checkout
@@ -24,14 +26,42 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Restart pipe
-        run: |
-          echo "Restarting....."
-
       - name: Get Version
+        id: get_version
         run: |
           VERSION=$(jq -r '.version' .github/package.json)
-          echo "IMAGE_TAG=${VERSION}" >> $GITHUB_ENV
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+
+      - name: Build Docker Image
+        run: |
+          docker build -t $ECR_REPOSITORY .
+
+      - name: Save Docker Image
+        run: |
+          docker save $ECR_REPOSITORY -o image.tar
+
+      - name: Upload Docker Image Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-image
+          path: image.tar
+          retention-days: 1
+
+  push-to-ecr:
+    needs: build-image
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_TAG: ${{ needs.build-image.outputs.image_tag }}
+
+    steps:
+      - name: Download Docker Image Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-image
+
+      - name: Load Docker Image
+        run: |
+          docker load -i image.tar
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -44,10 +74,6 @@ jobs:
         run: |
           aws ecr get-login-password --region $AWS_REGION \
             | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
-
-      - name: Build Docker Image
-        run: |
-          docker build -t $ECR_REPOSITORY .
 
       - name: Tag Docker Image
         run: |
