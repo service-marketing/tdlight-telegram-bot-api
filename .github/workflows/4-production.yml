@@ -5,9 +5,20 @@ on:
     branches:
       - master
 
+env:
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+  AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID_PROD }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
+  IMAGE_TAG: "v1.0.0"
+  GIT_SECRET_TOKEN: ${{ secrets.GIT_SECRET_TOKEN }}
+
 jobs:
-  build-and-push-to-ecr:
+  build-image:
     runs-on: ubuntu-latest
+    outputs:
+      image_tag: ${{ steps.get_version.outputs.version }}
 
     steps:
       - name: Checkout
@@ -15,32 +26,61 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Restart pipe
+      - name: Get Version
+        id: get_version
         run: |
-          echo "Restarting...."
+          VERSION=$(jq -r '.version' .github/package.json)
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
 
-      # - name: Configure AWS Credentials
-      #   uses: aws-actions/configure-aws-credentials@v4
-      #   with:
-      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     aws-region: ${{ env.AWS_REGION }}
+      - name: Build Docker Image
+        run: |
+          docker build -t $ECR_REPOSITORY .
 
-      # - name: Login to Amazon ECR
-      #   run: |
-      #     aws ecr get-login-password --region $AWS_REGION \
-      #       | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+      - name: Save Docker Image
+        run: |
+          docker save $ECR_REPOSITORY -o image.tar
 
-      # - name: Build Docker Image
-      #   run: |
-      #     docker build -t $ECR_REPOSITORY .
+      - name: Upload Docker Image Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-image
+          path: image.tar
+          retention-days: 1
 
-      # - name: Tag Docker Image
-      #   run: |
-      #     docker tag $ECR_REPOSITORY:latest \
-      #       $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
+  push-to-ecr:
+    needs: build-image
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_TAG: ${{ needs.build-image.outputs.image_tag }}
 
-      # - name: Push to ECR
-      #   run: |
-      #     docker push \
-      #       $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
+    steps:
+      - name: Download Docker Image Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-image
+
+      - name: Load Docker Image
+        run: |
+          docker load -i image.tar
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        run: |
+          aws ecr get-login-password --region $AWS_REGION \
+            | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+
+      - name: Tag Docker Image
+        run: |
+          docker tag $ECR_REPOSITORY:latest \
+            $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
+
+      - name: Push to ECR
+        run: |
+          docker push \
+            $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG

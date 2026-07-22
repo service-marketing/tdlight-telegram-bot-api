@@ -8,7 +8,6 @@ on:
 jobs:
   infra-validation:
     runs-on: ubuntu-latest
-    environment: development_env
 
     steps:
       - name: Run only if PR was merged
