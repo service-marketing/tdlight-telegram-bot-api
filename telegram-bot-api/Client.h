@@ -1454,6 +1454,8 @@ class Client final : public WebhookActor::Callback {
 
   void add_update_message_reaction_count(object_ptr<td_api::updateMessageReactions> &&update);
 
+  void add_update_message_interaction_info(object_ptr<td_api::updateMessageInteractionInfo> &&update);
+
   void add_update_business_connection(object_ptr<td_api::updateBusinessConnection> &&update);
 
   void add_update_business_messages_deleted(object_ptr<td_api::updateBusinessMessagesDeleted> &&update);

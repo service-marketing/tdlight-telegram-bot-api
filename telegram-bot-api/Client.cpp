@@ -9741,6 +9741,9 @@ void Client::on_update(object_ptr<td_api::Object> result) {
     case td_api::updateMessageReactions::ID:
       add_update_message_reaction_count(move_object_as<td_api::updateMessageReactions>(result));
       break;
+    case td_api::updateMessageInteractionInfo::ID:
+      add_update_message_interaction_info(move_object_as<td_api::updateMessageInteractionInfo>(result));
+      break;
     case td_api::updateBusinessConnection::ID:
       add_update_business_connection(move_object_as<td_api::updateBusinessConnection>(result));
       break;
@@ -18203,6 +18206,20 @@ void Client::add_update_message_reaction_count(object_ptr<td_api::updateMessageR
     LOG(DEBUG) << "Skip updateMessageReactions with date " << update->date_ << ", because current date is "
                << get_unix_time();
   }
+}
+
+void Client::add_update_message_interaction_info(object_ptr<td_api::updateMessageInteractionInfo> &&update) {
+  CHECK(update != nullptr);
+  // user sessions (userLogin/authToken) receive reaction changes embedded in the message itself
+  // instead of updateBotMessageReaction/updateBotMessageReactions, which are bot-only;
+  // convert them into a synthetic updateMessageReactions so message_reaction_count still fires
+  if (update->interaction_info_ == nullptr || update->interaction_info_->reactions_ == nullptr ||
+      update->interaction_info_->reactions_->reactions_.empty()) {
+    return;
+  }
+  add_update_message_reaction_count(make_object<td_api::updateMessageReactions>(
+      update->chat_id_, update->message_id_, get_unix_time(),
+      std::move(update->interaction_info_->reactions_->reactions_)));
 }
 
 void Client::add_update_business_connection(object_ptr<td_api::updateBusinessConnection> &&update) {
