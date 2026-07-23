@@ -1,6 +1,8 @@
 # Webhooks recebidos — regras gerais
 
-Cada webhook chega como um `Update` (objeto do Bot API). Sempre tem `update_id` mais **uma** destas chaves:
+Cada webhook chega como um `Update` (objeto do Bot API). Sempre tem `update_id`, `bot_id` mais **uma** destas chaves:
+
+`bot_id` identifica a instância (ID numérico do bot no Telegram, mesmo valor retornado por `getMe` e mesmo prefixo antes do `:` no token do BotFather). Não é secreto, não muda entre updates, e vem em **todo** update — inclusive `deleted_messages` e `poll`, que não têm `from`/`chat` pra correlacionar de outra forma. Equivalente ao `metadata.phone_number_id` dos webhooks da Meta.
 
 | Chave | Quando aparece |
 |---|---|
