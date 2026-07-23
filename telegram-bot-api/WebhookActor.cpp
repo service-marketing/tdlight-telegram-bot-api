@@ -35,12 +35,13 @@ static int VERBOSITY_NAME(webhook) = VERBOSITY_NAME(DEBUG);
 
 std::atomic<td::uint64> WebhookActor::total_connection_count_{0};
 
-WebhookActor::WebhookActor(td::ActorShared<Callback> callback, td::int64 tqueue_id, td::HttpUrl url,
+WebhookActor::WebhookActor(td::ActorShared<Callback> callback, td::int64 tqueue_id, td::int64 bot_id, td::HttpUrl url,
                            td::string cert_path, td::int32 max_connections, bool from_db_flag,
                            td::string cached_ip_address, bool fix_ip_address, td::string secret_token,
                            std::shared_ptr<const ClientParameters> parameters)
     : callback_(std::move(callback))
     , tqueue_id_(tqueue_id)
+    , bot_id_(bot_id)
     , url_(std::move(url))
     , cert_path_(std::move(cert_path))
     , parameters_(std::move(parameters))
@@ -549,7 +550,7 @@ td::Status WebhookActor::send_update() {
   auto &update = *update_map_it->second;
   update.last_send_time_ = now;
 
-  auto body = td::json_encode<td::BufferSlice>(JsonUpdate(update.id_.value(), update.json_));
+  auto body = td::json_encode<td::BufferSlice>(JsonUpdate(update.id_.value(), update.json_, bot_id_));
 
   td::HttpHeaderCreator hc;
   hc.init_post(url_.query_);

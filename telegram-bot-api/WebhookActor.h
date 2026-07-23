@@ -52,9 +52,9 @@ class WebhookActor final : public td::HttpOutboundConnection::Callback {
     virtual void send(PromisedQueryPtr query) = 0;
   };
 
-  WebhookActor(td::ActorShared<Callback> callback, td::int64 tqueue_id, td::HttpUrl url, td::string cert_path,
-               td::int32 max_connections, bool from_db_flag, td::string cached_ip_address, bool fix_ip_address,
-               td::string secret_token, std::shared_ptr<const ClientParameters> parameters);
+  WebhookActor(td::ActorShared<Callback> callback, td::int64 tqueue_id, td::int64 bot_id, td::HttpUrl url,
+               td::string cert_path, td::int32 max_connections, bool from_db_flag, td::string cached_ip_address,
+               bool fix_ip_address, td::string secret_token, std::shared_ptr<const ClientParameters> parameters);
   WebhookActor(const WebhookActor &) = delete;
   WebhookActor &operator=(const WebhookActor &) = delete;
   WebhookActor(WebhookActor &&) = delete;
@@ -79,6 +79,7 @@ class WebhookActor final : public td::HttpOutboundConnection::Callback {
 
   td::ActorShared<Callback> callback_;
   const td::int64 tqueue_id_;
+  const td::int64 bot_id_;
   bool tqueue_empty_ = false;
   std::size_t last_pending_update_count_ = MIN_PENDING_UPDATES_WARNING;
 
@@ -225,10 +226,11 @@ class WebhookActor final : public td::HttpOutboundConnection::Callback {
 
 class JsonUpdate final : public td::Jsonable {
  public:
-  JsonUpdate(td::int32 id, td::Slice update) : id_(id), update_(update) {
+  JsonUpdate(td::int32 id, td::Slice update, td::int64 bot_id) : id_(id), update_(update), bot_id_(bot_id) {
   }
   void store(td::JsonValueScope *scope) const {
     auto object = scope->enter_object();
+    object("bot_id", bot_id_);
     object("update_id", id_);
     object << td::JsonRaw(",\n");
     CHECK(!update_.empty());
@@ -238,6 +240,7 @@ class JsonUpdate final : public td::Jsonable {
  private:
   td::int32 id_;
   td::Slice update_;
+  td::int64 bot_id_;
 };
 
 }  // namespace telegram_bot_api

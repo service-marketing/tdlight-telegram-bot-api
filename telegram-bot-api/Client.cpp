@@ -16969,7 +16969,7 @@ void Client::finish_set_webhook(PromisedQueryPtr query) {
   LOG(WARNING) << "Create " << (has_webhook_certificate_ ? "self-signed " : "") << "webhook: " << new_url;
   auto webhook_actor_name = PSTRING() << "Webhook " << url.ok();
   webhook_id_ = td::create_actor<WebhookActor>(
-      webhook_actor_name, actor_shared(this, webhook_generation_), tqueue_id_, url.move_as_ok(),
+      webhook_actor_name, actor_shared(this, webhook_generation_), tqueue_id_, my_id_, url.move_as_ok(),
       has_webhook_certificate_ ? get_webhook_certificate_path() : td::string(), webhook_max_connections_,
       query->is_internal(), webhook_ip_address_, webhook_fix_ip_address_, webhook_secret_token_, parameters_);
   // wait for webhook verified or webhook callback
@@ -17185,7 +17185,7 @@ Client::ClosingError Client::get_closing_error() {
 
 class Client::JsonUpdates final : public td::Jsonable {
  public:
-  explicit JsonUpdates(td::Span<td::TQueue::Event> updates) : updates_(updates) {
+  JsonUpdates(td::Span<td::TQueue::Event> updates, td::int64 bot_id) : updates_(updates), bot_id_(bot_id) {
   }
   void store(td::JsonValueScope *scope) const {
     auto array = scope->enter_array();
@@ -17195,12 +17195,13 @@ class Client::JsonUpdates final : public td::Jsonable {
       if (left_len <= 0) {
         break;
       }
-      array << JsonUpdate(update.id.value(), update.data);
+      array << JsonUpdate(update.id.value(), update.data, bot_id_);
     }
   }
 
  private:
   td::Span<td::TQueue::Event> updates_;
+  td::int64 bot_id_;
 };
 
 void Client::do_get_updates(int32 offset, int32 limit, int32 timeout, PromisedQueryPtr query) {
@@ -17285,7 +17286,7 @@ void Client::do_get_updates(int32 offset, int32 limit, int32 timeout, PromisedQu
     send_request(make_object<td_api::setBotUpdatesStatus>(0, ""), td::make_unique<TdOnOkCallback>());
     was_bot_updates_warning_ = false;
   }
-  answer_query(JsonUpdates(updates), std::move(query));
+  answer_query(JsonUpdates(updates, my_id_), std::move(query));
 }
 
 void Client::long_poll_wakeup(bool force_flag) {
