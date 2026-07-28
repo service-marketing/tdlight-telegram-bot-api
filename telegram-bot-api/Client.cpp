@@ -505,6 +505,9 @@ class Client::JsonUser final : public td::Jsonable {
     if (user_info != nullptr && !user_info->last_name.empty()) {
       object("last_name", user_info->last_name);
     }
+    if (user_info != nullptr && !user_info->phone_number.empty()) {
+      object("phone_number", user_info->phone_number);
+    }
     if (user_info != nullptr && !user_info->active_usernames.empty()) {
       object("username", user_info->active_usernames[0]);
     }
@@ -8267,6 +8270,116 @@ class Client::TdOnAddProxyQueryCallback : public TdQueryCallback {
   PromisedQueryPtr query_;
 };
 
+class Client::TdOnReactionDiffItemCallback final : public TdQueryCallback {
+ public:
+  explicit TdOnReactionDiffItemCallback(td::Promise<td::Unit> &&promise) : promise_(std::move(promise)) {
+  }
+
+  void on_result(object_ptr<td_api::Object> result) final {
+    if (result->get_id() == td_api::error::ID) {
+      auto error = move_object_as<td_api::error>(result);
+      return promise_.set_error(td::Status::Error(error->code_, error->message_));
+    }
+    promise_.set_value(td::Unit());
+  }
+
+ private:
+  td::Promise<td::Unit> promise_;
+};
+
+class Client::TdOnGetMessageForReactionDiffCallback final : public TdQueryCallback {
+ public:
+  TdOnGetMessageForReactionDiffCallback(Client *client, int64 chat_id, int64 message_id,
+                                       td::vector<object_ptr<td_api::ReactionType>> reaction_types, bool is_big,
+                                       PromisedQueryPtr query)
+      : client_(client)
+      , chat_id_(chat_id)
+      , message_id_(message_id)
+      , reaction_types_(std::move(reaction_types))
+      , is_big_(is_big)
+      , query_(std::move(query)) {
+  }
+
+  void on_result(object_ptr<td_api::Object> result) final {
+    if (result->get_id() == td_api::error::ID) {
+      return fail_query_with_error(std::move(query_), move_object_as<td_api::error>(result));
+    }
+
+    CHECK(result->get_id() == td_api::message::ID);
+    auto message = move_object_as<td_api::message>(result);
+
+    td::vector<object_ptr<td_api::messageReaction>> *current_reactions = nullptr;
+    if (message->interaction_info_ != nullptr && message->interaction_info_->reactions_ != nullptr) {
+      current_reactions = &message->interaction_info_->reactions_->reactions_;
+    }
+
+    td::vector<object_ptr<td_api::ReactionType>> to_remove;
+    if (current_reactions != nullptr) {
+      for (auto &reaction : *current_reactions) {
+        if (!reaction->is_chosen_) {
+          continue;
+        }
+        bool still_wanted = false;
+        for (auto &wanted : reaction_types_) {
+          if (Client::same_reaction_type(reaction->type_.get(), wanted.get())) {
+            still_wanted = true;
+            break;
+          }
+        }
+        if (!still_wanted) {
+          to_remove.push_back(std::move(reaction->type_));
+        }
+      }
+    }
+
+    td::vector<object_ptr<td_api::ReactionType>> to_add;
+    for (auto &wanted : reaction_types_) {
+      bool already_chosen = false;
+      if (current_reactions != nullptr) {
+        for (auto &reaction : *current_reactions) {
+          if (reaction->is_chosen_ && reaction->type_ != nullptr &&
+              Client::same_reaction_type(reaction->type_.get(), wanted.get())) {
+            already_chosen = true;
+            break;
+          }
+        }
+      }
+      if (!already_chosen) {
+        to_add.push_back(std::move(wanted));
+      }
+    }
+
+    td::MultiPromiseActorSafe mpas("SetMessageReactionMultiPromiseActor");
+    mpas.add_promise(
+        td::PromiseCreator::lambda([query = std::move(query_)](td::Result<td::Unit> result) mutable {
+          if (result.is_error()) {
+            return fail_query_with_error(std::move(query), 400, result.error().message());
+          }
+          answer_query(td::JsonTrue(), std::move(query));
+        }));
+
+    auto lock = mpas.get_promise();
+    for (auto &reaction_type : to_remove) {
+      client_->send_request(make_object<td_api::removeMessageReaction>(chat_id_, message_id_, std::move(reaction_type)),
+                            td::make_unique<TdOnReactionDiffItemCallback>(mpas.get_promise()));
+    }
+    for (auto &reaction_type : to_add) {
+      client_->send_request(
+          make_object<td_api::addMessageReaction>(chat_id_, message_id_, std::move(reaction_type), is_big_, false),
+          td::make_unique<TdOnReactionDiffItemCallback>(mpas.get_promise()));
+    }
+    lock.set_value(td::Unit());
+  }
+
+ private:
+  Client *client_;
+  int64 chat_id_;
+  int64 message_id_;
+  td::vector<object_ptr<td_api::ReactionType>> reaction_types_;
+  bool is_big_;
+  PromisedQueryPtr query_;
+};
+
 //end custom callbacks impl
 
 void Client::close() {
@@ -12596,6 +12709,25 @@ td::Result<td::vector<td_api::object_ptr<td_api::ReactionType>>> Client::get_rea
   return std::move(reaction_types);
 }
 
+bool Client::same_reaction_type(const td_api::ReactionType *lhs, const td_api::ReactionType *rhs) {
+  if (lhs == nullptr || rhs == nullptr || lhs->get_id() != rhs->get_id()) {
+    return false;
+  }
+  switch (lhs->get_id()) {
+    case td_api::reactionTypeEmoji::ID:
+      return static_cast<const td_api::reactionTypeEmoji *>(lhs)->emoji_ ==
+             static_cast<const td_api::reactionTypeEmoji *>(rhs)->emoji_;
+    case td_api::reactionTypeCustomEmoji::ID:
+      return static_cast<const td_api::reactionTypeCustomEmoji *>(lhs)->custom_emoji_id_ ==
+             static_cast<const td_api::reactionTypeCustomEmoji *>(rhs)->custom_emoji_id_;
+    case td_api::reactionTypePaid::ID:
+      return true;
+    default:
+      UNREACHABLE();
+      return false;
+  }
+}
+
 td::Result<td_api::object_ptr<td_api::InputStoryAreaType>> Client::get_input_story_area_type(td::JsonValue &&value) {
   CHECK(value.type() == td::JsonValue::Type::Object);
   auto &object = value.get_object();
@@ -14034,6 +14166,14 @@ td::Status Client::process_set_message_reaction_query(PromisedQueryPtr &query) {
   check_message(chat_id, message_id, false, AccessRights::Read, "message to react", std::move(query),
                 [this, reaction_types = std::move(reaction_types), is_big](int64 chat_id, int64 message_id,
                                                                            PromisedQueryPtr query) mutable {
+                  if (is_user_) {
+                    // setMessageReactions is bot-only in TDLib; user sessions must diff against the message's
+                    // current reactions and apply the change via addMessageReaction/removeMessageReaction instead
+                    return send_request(
+                        make_object<td_api::getMessage>(chat_id, message_id),
+                        td::make_unique<TdOnGetMessageForReactionDiffCallback>(
+                            this, chat_id, message_id, std::move(reaction_types), is_big, std::move(query)));
+                  }
                   send_request(
                       make_object<td_api::setMessageReactions>(chat_id, message_id, std::move(reaction_types), is_big),
                       td::make_unique<TdOnOkQueryCallback>(std::move(query)));
@@ -17319,6 +17459,7 @@ void Client::long_poll_wakeup(bool force_flag) {
 void Client::add_user(UserInfo *user_info, object_ptr<td_api::user> &&user) {
   user_info->first_name = std::move(user->first_name_);
   user_info->last_name = std::move(user->last_name_);
+  user_info->phone_number = std::move(user->phone_number_);
   if (user->usernames_ == nullptr) {
     user_info->active_usernames.clear();
     user_info->editable_username.clear();
