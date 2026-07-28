@@ -346,6 +346,8 @@ class Client final : public WebhookActor::Callback {
   class TdOnGetCallbackQueryAnswerCallback;
   class TdOnGetProxiesQueryCallback;
   class TdOnAddProxyQueryCallback;
+  class TdOnReactionDiffItemCallback;
+  class TdOnGetMessageForReactionDiffCallback;
   //end custom callbacks
 
   void on_get_reply_message(int64 chat_id, object_ptr<td_api::message> reply_to_message);
@@ -734,6 +736,8 @@ class Client final : public WebhookActor::Callback {
 
   static td::Result<td::vector<object_ptr<td_api::ReactionType>>> get_reaction_types(const Query *query);
 
+  static bool same_reaction_type(const td_api::ReactionType *lhs, const td_api::ReactionType *rhs);
+
   static td::Result<object_ptr<td_api::InputStoryAreaType>> get_input_story_area_type(td::JsonValue &&value);
 
   static td::Result<object_ptr<td_api::inputStoryArea>> get_input_story_area(td::JsonValue &&value);
@@ -1097,6 +1101,7 @@ class Client final : public WebhookActor::Callback {
 
     td::string first_name;
     td::string last_name;
+    td::string phone_number;
     td::vector<td::string> active_usernames;
     td::string editable_username;
     td::string language_code;
