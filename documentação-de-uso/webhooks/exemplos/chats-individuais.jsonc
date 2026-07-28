@@ -839,4 +839,30 @@
             "text": "Testeeee citação"
         }
     },
+    // from.phone_number — só aparece quando o TDLib expõe o telefone do contato
+    {
+        "update_id": 953675492,
+        "message": {
+            "message_id": 1851,
+            "from": {
+                "id": 8989074661,
+                "is_bot": false,
+                "is_deleted": false,
+                "first_name": "Alex Sm",
+                "phone_number": "5511969082639",
+                "is_premium": true,
+                "user_status": "online"
+            },
+            "chat": {
+                "id": 8989074661,
+                "first_name": "Alex Sm",
+                "type": "private",
+                "user_status": "online",
+                "is_premium": true
+            },
+            "date": 1785270811,
+            "is_outgoing": false,
+            "text": "Slv"
+        }
+    },
 ]
