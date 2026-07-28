@@ -22,6 +22,7 @@ Exemplos completos em [exemplos/](exemplos/): [criacao-de-chats.md](criacao-de-c
 | `is_deleted` | Boolean | Sim | Conta deletada |
 | `first_name` | String | Sim | |
 | `last_name` | String | Não | |
+| `phone_number` | String | Não | Só quando o TDLib expõe o telefone do contato (contas com número visível) |
 | `username` | String | Não | |
 | `user_status` | String | Sim | `online` ou `offline` |
 | `last_seen` | Integer (unix) | Não | Só quando `user_status` é `offline` |
