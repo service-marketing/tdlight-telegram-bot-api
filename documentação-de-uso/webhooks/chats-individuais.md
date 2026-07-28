@@ -14,6 +14,25 @@ Campos comuns, objetos `User`/`Chat` e tipos de conteúdo em [README.md](README.
 }
 ```
 
+## `from.phone_number`
+
+Só aparece quando o TDLib expõe o telefone do contato (não é garantido em todo `from`). Nunca aparece em `chat` — lá continua só `first_name`/`last_name`/`username`/`user_status`.
+
+```json
+{
+  "from": {
+    "id": 8989074661,
+    "is_bot": false,
+    "is_deleted": false,
+    "first_name": "Alex Sm",
+    "phone_number": "5511969082639",
+    "is_premium": true,
+    "user_status": "online"
+  },
+  "text": "Slv"
+}
+```
+
 ## Áudio de voz
 
 ```json
