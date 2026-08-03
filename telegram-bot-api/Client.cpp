@@ -6744,25 +6744,39 @@ class Client::TdOnCheckUserNoFailCallback final : public TdQueryCallback {
 template <class OnSuccess>
 class Client::TdOnCheckChatCallback final : public TdQueryCallback {
  public:
-  TdOnCheckChatCallback(const Client *client, bool only_supergroup, AccessRights access_rights, PromisedQueryPtr query,
-                        OnSuccess on_success)
+  TdOnCheckChatCallback(Client *client, bool only_supergroup, AccessRights access_rights, PromisedQueryPtr query,
+                        OnSuccess on_success, int64 chat_id = 0, bool allow_resync = false)
       : client_(client)
       , only_supergroup_(only_supergroup)
       , access_rights_(access_rights)
       , query_(std::move(query))
-      , on_success_(std::move(on_success)) {
+      , on_success_(std::move(on_success))
+      , chat_id_(chat_id)
+      , allow_resync_(allow_resync) {
   }
 
   void on_result(object_ptr<td_api::Object> result) final {
     if (result->get_id() == td_api::error::ID) {
+      if (allow_resync_ && chat_id_ != 0) {
+        // a lone getChat wasn't enough to resolve this chat (e.g. the local dialog cache was wiped by a
+        // full re-login) - force a resync of the dialog list from the server and retry getChat once more
+        // before giving up. Scoped to just this one request, not an eager bulk load on every reconnection.
+        client_->send_request(
+            make_object<td_api::getChats>(make_object<td_api::chatListMain>(), 100),
+            td::make_unique<TdOnResyncAndRetryChatCallback<OnSuccess>>(client_, chat_id_, only_supergroup_,
+                                                                       access_rights_, std::move(query_),
+                                                                       std::move(on_success_)));
+        return;
+      }
       return fail_query_with_error(std::move(query_), move_object_as<td_api::error>(result), "chat not found");
     }
 
     CHECK(result->get_id() == td_api::chat::ID);
     auto chat = move_object_as<td_api::chat>(result);
-    auto chat_info = client_->get_chat(chat->id_);
+    auto chat_info = client_->add_chat(chat->id_);
     CHECK(chat_info != nullptr);  // it must have already been received through updates
     CHECK(chat_info->title == chat->title_);
+    chat_info->verified_generation = client_->chat_generation_;
     if (only_supergroup_ && chat_info->type != ChatInfo::Type::Supergroup) {
       return fail_query(400, "Bad Request: chat not found", std::move(query_));
     }
@@ -6771,7 +6785,40 @@ class Client::TdOnCheckChatCallback final : public TdQueryCallback {
   }
 
  private:
-  const Client *client_;
+  Client *client_;
+  bool only_supergroup_;
+  AccessRights access_rights_;
+  PromisedQueryPtr query_;
+  OnSuccess on_success_;
+  int64 chat_id_;
+  bool allow_resync_;
+};
+
+template <class OnSuccess>
+class Client::TdOnResyncAndRetryChatCallback final : public TdQueryCallback {
+ public:
+  TdOnResyncAndRetryChatCallback(Client *client, int64 chat_id, bool only_supergroup, AccessRights access_rights,
+                                 PromisedQueryPtr query, OnSuccess on_success)
+      : client_(client)
+      , chat_id_(chat_id)
+      , only_supergroup_(only_supergroup)
+      , access_rights_(access_rights)
+      , query_(std::move(query))
+      , on_success_(std::move(on_success)) {
+  }
+
+  void on_result(object_ptr<td_api::Object> result) final {
+    // ignore whether the resync itself succeeded or errored; retry getChat regardless, this time final
+    client_->send_request(
+        make_object<td_api::getChat>(chat_id_),
+        td::make_unique<TdOnCheckChatCallback<OnSuccess>>(client_, only_supergroup_, access_rights_,
+                                                           std::move(query_), std::move(on_success_), chat_id_,
+                                                           false));
+  }
+
+ private:
+  Client *client_;
+  int64 chat_id_;
   bool only_supergroup_;
   AccessRights access_rights_;
   PromisedQueryPtr query_;
@@ -8820,12 +8867,17 @@ void Client::check_chat(td::Slice chat_id_str, AccessRights access_rights, Promi
       chat_info = nullptr;
     }
   }
+  // even if we still remember this chat locally, TDLib's own dialog cache may have forgotten it after a
+  // reconnection; re-verify with getChat once per chat per reconnection instead of trusting the stale entry
+  if (chat_info != nullptr && chat_info->verified_generation != chat_generation_) {
+    chat_info = nullptr;
+  }
   if (chat_info != nullptr) {
     return check_chat_access(chat_id, access_rights, chat_info, std::move(query), std::move(on_success));
   }
   send_request(make_object<td_api::getChat>(chat_id),
                td::make_unique<TdOnCheckChatCallback<OnSuccess>>(this, false, access_rights, std::move(query),
-                                                                 std::move(on_success)));
+                                                                 std::move(on_success), chat_id, true));
 }
 
 template <class OnSuccess>
@@ -9872,6 +9924,13 @@ void Client::on_update(object_ptr<td_api::Object> result) {
     case td_api::updateConnectionState::ID: {
       auto update = move_object_as<td_api::updateConnectionState>(result);
       if (update->state_->get_id() == td_api::connectionStateReady::ID) {
+        if (disconnection_time_ != 0) {
+          // reconnected after a disconnection: TDLib's own dialog cache may have dropped chats we still
+          // remember locally. Bump the generation instead of eagerly listing every chat (which risks a
+          // timeout on accounts with many chats) - check_chat() lazily re-verifies each chat with getChat
+          // the next time it is actually used, one chat at a time.
+          chat_generation_++;
+        }
         update_last_synchronization_error_date();
         disconnection_time_ = 0;
       } else if (disconnection_time_ == 0) {
