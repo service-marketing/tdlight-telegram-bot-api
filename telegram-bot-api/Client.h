@@ -404,6 +404,8 @@ class Client final : public WebhookActor::Callback {
   template <class OnSuccess>
   class TdOnCheckChatCallback;
   template <class OnSuccess>
+  class TdOnResyncAndRetryChatCallback;
+  template <class OnSuccess>
   class TdOnEnableInternetConnectionCallback;
   template <class OnSuccess>
   class TdOnOptimizeMemoryCallback;
@@ -1198,6 +1200,7 @@ class Client final : public WebhookActor::Callback {
   struct ChatInfo {
     enum class Type { Private, Group, Supergroup, Unknown };
     Type type = Type::Unknown;
+    td::uint64 verified_generation = 0;  // chat_generation_ value as of the last successful getChat re-check
     td::string title;
     int32 message_auto_delete_time = 0;
     int64 emoji_status_custom_emoji_id = 0;
@@ -1702,6 +1705,9 @@ class Client final : public WebhookActor::Callback {
   double local_unix_time_difference_ = 0;  // Unix time - now()
 
   double disconnection_time_ = 0;         // the time when Connection state changed from "Ready", or 0 if it is "Ready"
+  // bumped on every reconnection; a ChatInfo whose verified_generation is behind this may have gone stale in TDLib's
+  // own dialog cache even though we still remember it locally, so check_chat must re-verify it with getChat once
+  td::uint64 chat_generation_ = 1;
   double last_update_creation_time_ = 0;  // the time when the last update was added
   int32 last_synchronization_error_date_ = 0;  // the date of the last connection error
 
