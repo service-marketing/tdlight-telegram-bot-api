@@ -6516,6 +6516,35 @@ class Client::TdOnDeleteFailedToSendMessageCallback final : public TdQueryCallba
   td::string old_chat_description_;
 };
 
+class Client::TdOnCheckMessageBeforeDeleteCallback final : public TdQueryCallback {
+ public:
+  TdOnCheckMessageBeforeDeleteCallback(Client *client, int64 chat_id, int64 message_id)
+      : client_(client), chat_id_(chat_id), message_id_(message_id) {
+  }
+
+  void on_result(object_ptr<td_api::Object> result) final {
+    if (result->get_id() != td_api::error::ID) {
+      // message_id belongs to a real, existing message — most likely the failed send's temporary id
+      // collided with an unrelated older message in the chat (local messages_ cache isn't authoritative
+      // enough to catch this, since it only holds messages this process has recently touched).
+      // Deleting it would delete real data, so leave it alone.
+      LOG(ERROR) << "Failed to send message " << message_id_ << " in the chat " << chat_id_
+                 << " collides with an existing message; skipping its cleanup";
+      return;
+    }
+    if (client_->logging_out_ || client_->closing_) {
+      return;
+    }
+    client_->send_request(make_object<td_api::deleteMessages>(chat_id_, td::vector<int64>{message_id_}, false),
+                          td::make_unique<TdOnDeleteFailedToSendMessageCallback>(client_, chat_id_, message_id_));
+  }
+
+ private:
+  Client *client_;
+  int64 chat_id_;
+  int64 message_id_;
+};
+
 class Client::TdOnEditMessageCallback final : public TdQueryCallback {
  public:
   TdOnEditMessageCallback(const Client *client, PromisedQueryPtr query) : client_(client), query_(std::move(query)) {
@@ -9569,11 +9598,17 @@ void Client::on_update(object_ptr<td_api::Object> result) {
       td::vector<td::unique_ptr<MessageInfo>> deleted_messages;
       td::vector<int64> confirmed_deleted_message_ids;
       for (auto message_id : update->message_ids_) {
+        // A failed send can be reported as an outright deletion instead of updateMessageSendFailed
+        // (see td_api.tl's updateMessageSendFailed doc). That message was never actually delivered,
+        // so it must not be forwarded to the webhook as a real "message deleted" event; check
+        // yet_unsent_messages_ before delete_message() below, since it consumes this same entry
+        // while resolving the original send query as failed.
+        bool is_own_failed_send = yet_unsent_messages_.count({update->chat_id_, message_id}) > 0;
         auto deleted_message = delete_message(update->chat_id_, message_id, update->from_cache_);
         if (deleted_message != nullptr) {
           deleted_messages.push_back(std::move(deleted_message));
         }
-        if (!update->from_cache_) {
+        if (!update->from_cache_ && !is_own_failed_send) {
           confirmed_deleted_message_ids.push_back(message_id);
         }
       }
@@ -13351,8 +13386,13 @@ void Client::on_message_send_failed(int64 chat_id, int64 old_message_id, int64 n
   }
 
   if (new_message_id != 0 && !logging_out_ && !closing_) {
-    send_request(make_object<td_api::deleteMessages>(chat_id, td::vector<int64>{new_message_id}, false),
-                 td::make_unique<TdOnDeleteFailedToSendMessageCallback>(this, chat_id, new_message_id));
+    // Ask TDLib itself whether new_message_id is a real, existing message before deleting it: the
+    // failed send's temporary id can collide with an unrelated older message in this chat (observed
+    // after reconnects), and deleting that for real would destroy real data. The local messages_
+    // cache isn't authoritative enough for this check — it only holds messages this process recently
+    // touched, so an older uncached real message would slip through undetected.
+    send_request(make_object<td_api::getMessage>(chat_id, new_message_id),
+                 td::make_unique<TdOnCheckMessageBeforeDeleteCallback>(this, chat_id, new_message_id));
   }
 }
 
