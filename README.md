@@ -69,6 +69,32 @@ No parameters
 ###### Returns `string`
 Ping delay in seconds represented as string.
 
+##### Method `resolvePhoneNumber`
+*User mode only.*
+
+Resolve a phone number into the private chat with its owner, and open that chat.
+
+This is what makes it possible to message a contact the session has never talked to before.
+Sending to such a contact otherwise fails with `Bad Request: chat not found`, because an MTProto
+session can only message peers whose `access_hash` it already knows, and a phone number alone
+carries none. The method resolves the number against the server and then opens the private chat,
+which is what teaches the session that peer.
+
+###### Parameters
+- `phone_number` Phone number in international format. The leading `+` is optional.
+
+###### Returns `Chat`
+The private chat with the resolved user. Its `id` is the `chat_id` to use in `sendMessage` and
+friends.
+
+###### Errors
+Fails with `phone number not found` when no Telegram account uses that number, or when its owner
+does not allow being found by phone number (*Privacy and Security > Who can find me by my phone
+number*). The latter is a deliberate privacy setting and cannot be bypassed.
+
+Note that messaging many strangers from a user account is what Telegram's anti-spam system looks
+for; expect `PEER_FLOOD` and possible account limits if this is used for bulk outreach.
+
 <!--TODO:
 #### Command `toggleGroupInvites`
 (todo)
