@@ -349,6 +349,7 @@ class Client final : public WebhookActor::Callback {
   class TdOnAddProxyQueryCallback;
   class TdOnReactionDiffItemCallback;
   class TdOnGetMessageForReactionDiffCallback;
+  class TdOnResolvePhoneNumberCallback;
   //end custom callbacks
 
   void on_get_reply_message(int64 chat_id, object_ptr<td_api::message> reply_to_message);
@@ -1012,6 +1013,7 @@ class Client final : public WebhookActor::Callback {
   td::Status process_delete_chat_history_query(PromisedQueryPtr &query);
   td::Status process_get_scheduled_messages_query(PromisedQueryPtr &query);
   td::Status process_edit_message_scheduling_query(PromisedQueryPtr &query);
+  td::Status process_resolve_phone_number_query(PromisedQueryPtr &query);
 
   //custom auth methods
   void process_auth_phone_number_query(PromisedQueryPtr &query);
