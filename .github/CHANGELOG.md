@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0-alpha.0](https://github.com/service-marketing/tdlight-telegram-bot-api/compare/v1.0.6-alpha.0...v1.1.0-alpha.0) (2026-09-25)
+
+
+### Features
+
+* ✨ Actively call contacts ([a6d8e3e](https://github.com/service-marketing/tdlight-telegram-bot-api/commit/a6d8e3e06f54ff9d717980a015f4f21953f75f4d))
+
 ### [1.0.6-alpha.0](https://github.com/service-marketing/tdlight-telegram-bot-api/compare/v1.0.5-alpha.0...v1.0.6-alpha.0) (2026-08-10)
 
 ### [1.0.5-alpha.0](https://github.com/service-marketing/tdlight-telegram-bot-api/compare/v1.0.4-alpha.1...v1.0.5-alpha.0) (2026-08-03)

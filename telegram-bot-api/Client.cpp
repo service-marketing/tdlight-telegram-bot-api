@@ -424,6 +424,7 @@ bool Client::init_methods() {
   methods_.emplace("deletechathistory", &Client::process_delete_chat_history_query);
   methods_.emplace("getscheduledmessages", &Client::process_get_scheduled_messages_query);
   methods_.emplace("editmessagescheduling", &Client::process_edit_message_scheduling_query);
+  methods_.emplace("resolvephonenumber", &Client::process_resolve_phone_number_query);
 
   return true;
 }
@@ -8242,6 +8243,44 @@ class Client::TdOnReturnChatCallback : public TdQueryCallback {
 
  private:
   const Client *client_;
+  PromisedQueryPtr query_;
+};
+
+class Client::TdOnResolvePhoneNumberCallback final : public TdQueryCallback {
+ public:
+  TdOnResolvePhoneNumberCallback(Client *client, PromisedQueryPtr query)
+      : client_(client), query_(std::move(query)) {
+  }
+
+  void on_result(object_ptr<td_api::Object> result) final {
+    if (result->get_id() == td_api::error::ID) {
+      auto error = move_object_as<td_api::error>(result);
+      // The server answers PHONE_NOT_OCCUPIED both when no account uses the number and
+      // when its owner forbids being found by phone number - it does not distinguish the
+      // two, on purpose. TDLib treats that answer as a success that yielded no user, so it
+      // reaches us as its generic "no data" error, 500 "Requested data is inaccessible".
+      // That is not a server fault here: the number simply cannot be reached. Report it as
+      // a 400 so callers can tell it apart from a broken session (401) or a flood wait
+      // (429), which must keep their own codes and are left untouched below.
+      if (error->code_ == 500 && error->message_ == "Requested data is inaccessible") {
+        return fail_query(400, "Bad Request: phone number not found", std::move(query_));
+      }
+      return fail_query_with_error(std::move(query_), std::move(error), "phone number not found");
+    }
+
+    CHECK(result->get_id() == td_api::user::ID);
+    auto user = move_object_as<td_api::user>(result);
+
+    // force = false on purpose: it forces a network request, which is what makes this
+    // session learn the peer access_hash. With force = true the chat would only be built
+    // from the local cache and the following sendMessage would still fail with
+    // "chat not found" - the very thing this method exists to avoid.
+    client_->send_request(make_object<td_api::createPrivateChat>(user->id_, false),
+                          td::make_unique<TdOnReturnChatCallback>(client_, std::move(query_)));
+  }
+
+ private:
+  Client *client_;
   PromisedQueryPtr query_;
 };
 
@@ -16879,6 +16918,20 @@ td::Status Client::process_edit_message_scheduling_query(PromisedQueryPtr &query
                send_request(make_object<td_api::editMessageSchedulingState>(chat_id, message_id, std::move(send_at)),
                             td::make_unique<TdOnOkQueryCallback>(std::move(query)));
              });
+  return td::Status::OK();
+}
+
+td::Status Client::process_resolve_phone_number_query(PromisedQueryPtr &query) {
+  CHECK_IS_USER();
+  auto phone_number = query->arg("phone_number");
+  if (phone_number.empty()) {
+    return td::Status::Error(400, "Bad Request: phone_number is empty");
+  }
+
+  // only_local = false so the number is resolved against the server, not only against
+  // the users this session already knows about.
+  send_request(make_object<td_api::searchUserByPhoneNumber>(phone_number.str(), false),
+               td::make_unique<TdOnResolvePhoneNumberCallback>(this, std::move(query)));
   return td::Status::OK();
 }
 
