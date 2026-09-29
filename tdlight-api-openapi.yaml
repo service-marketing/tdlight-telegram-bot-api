@@ -917,6 +917,76 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /resolvePhoneNumber:
+    post:
+      tags:
+        - added
+        - user-only
+      description: |-
+        *ONLY FOR USERS*
+
+        Resolves a phone number into the private chat with its owner and opens that chat, so that
+        messages can be sent to a contact this session has never talked to before.
+
+        The phone number is resolved against the server, and opening the chat makes the session
+        learn the peer, which is what `sendMessage` needs. Without this call, sending to a phone
+        number that never messaged you fails with `Bad Request: chat not found`.
+
+        Fails with `phone number not found` when no Telegram account uses that number, or when its
+        owner does not allow being found by phone number (Privacy and Security > Who can find me by
+        my phone number). That restriction cannot be bypassed.
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                phone_number:
+                  description: Phone number to resolve, in international format. The leading + is optional.
+                  type: string
+              required:
+                - phone_number
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                phone_number:
+                  description: Phone number to resolve, in international format. The leading + is optional.
+                  type: string
+              required:
+                - phone_number
+          application/json:
+            schema:
+              type: object
+              properties:
+                phone_number:
+                  description: Phone number to resolve, in international format. The leading + is optional.
+                  type: string
+              required:
+                - phone_number
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    default: true
+                    type: boolean
+                  result:
+                    $ref: '#/components/schemas/Chat'
+                required:
+                  - ok
+                  - result
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /setPollAnswer:
     post:
       tags:

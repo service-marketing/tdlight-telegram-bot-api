@@ -1,12 +1,27 @@
 FROM alpine:3.12 as build
 
-RUN apk add --no-cache --update alpine-sdk linux-headers git zlib-dev openssl-dev gperf cmake
+RUN apk add --no-cache --update alpine-sdk linux-headers git zlib-dev openssl-dev gperf cmake patch
 
 WORKDIR /usr/src/telegram-bot-api
 
 COPY CMakeLists.txt /usr/src/telegram-bot-api
 ADD td /usr/src/telegram-bot-api/td
 ADD telegram-bot-api /usr/src/telegram-bot-api/telegram-bot-api
+
+# Alteracoes nossas no TDLib vivem como .patch no repo pai, nunca editadas direto em td/:
+# o CI faz checkout com submodules: recursive e sempre traz o submodulo limpo no commit
+# fixado, entao uma edicao em td/ compilaria na maquina do dev e sumiria no pipeline.
+# Ver documentação-de-uso/patches-do-tdlib.md.
+#
+# O sed existe porque os .patch sao gerados em LF, mas um checkout Windows com
+# core.autocrlf=true entrega os fontes do td em CRLF - sem normalizar, o patch falha no
+# dev e aplica no CI. Os arquivos a normalizar saem do proprio patch, entao serve para
+# qualquer patch novo sem ajuste.
+COPY td-resolve-phone-cache.patch /usr/src/telegram-bot-api/
+RUN cd td \
+ && grep '^+++ b/' ../td-resolve-phone-cache.patch | sed 's|^+++ b/||' \
+      | while read -r f; do sed -i 's/\r$//' "$f"; done \
+ && patch -p1 < ../td-resolve-phone-cache.patch
 
 RUN mkdir -p build \
  && cd build \

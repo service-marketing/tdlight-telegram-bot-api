@@ -1,0 +1,22 @@
+diff --git a/td/telegram/UserManager.cpp b/td/telegram/UserManager.cpp
+index df38482cc..3c855eb36 100644
+--- a/td/telegram/UserManager.cpp
++++ b/td/telegram/UserManager.cpp
+@@ -8830,8 +8830,16 @@ UserId UserManager::search_user_by_phone_number(string phone_number, bool only_l
+     return UserId();
+   }
+ 
++  // SM CLICK PATCH - ver documentação-de-uso/patches-do-tdlib.md
++  // A negative entry - an invalid UserId stored by on_resolved_phone_number - records that a
++  // previous lookup found nothing, which is also what the server answers while the number's owner
++  // forbids being found by phone number. The entry never expires, so honoring it would keep that
++  // number unreachable for the whole lifetime of the process, long after the owner changed the
++  // setting. When the caller asked for a non-local lookup, ask the server again instead of
++  // trusting it. Positive entries are still served from the cache, so resolved numbers cost no
++  // extra traffic.
+   auto it = resolved_phone_numbers_.find(phone_number);
+-  if (it != resolved_phone_numbers_.end()) {
++  if (it != resolved_phone_numbers_.end() && (only_local || it->second.is_valid())) {
+     promise.set_value(Unit());
+     return it->second;
+   }
